@@ -90,6 +90,11 @@ public class Room
         return enemyList.size();
     }
     
+    public int getObjCount()
+    {
+        return objs.size();
+    }
+    
     public String getEnemy(int index) 
     {
         // returns the enemy at a specific index of enemyList
@@ -102,15 +107,16 @@ public class Room
         return enemyList.indexOf(search);
     }
     
-    public boolean enemyListContains(String search)
+    public String getObj(int index) 
     {
-        //returns true if the enemyList contains a certain enemy
-        boolean output = false;
-        if (enemyList.contains(search))
-        {
-            output = true;
-        }
-        return output;
+        // returns the obj at a specific index of objs
+        return objs.get(index);
+    }
+    
+    public int getObjIndex(String search)
+    {
+        // returns the index of an obj within objs
+        return objs.indexOf(search);
     }
 
     ////////////////////////////// SETTERS ////////////////////////////// 
@@ -148,6 +154,12 @@ public class Room
     {
         //removes an enemy at a certain index of enemyList
         enemyList.remove(index);
+    }
+    
+    public void removeObj(int index)
+    {
+        //removes an obj at a certain index of objs
+        objs.remove(index);
     }
     
     ////////////////////////////// BRAIN METHODS //////////////////////////////
@@ -188,6 +200,28 @@ public class Room
             }
         }
         return ambush;
+    }
+    
+    public boolean enemyListContains(String search)
+    {
+        //returns true if the enemyList contains a certain enemy
+        boolean output = false;
+        if (enemyList.contains(search))
+        {
+            output = true;
+        }
+        return output;
+    }
+    
+    public boolean objsContains(String search)
+    {
+        //returns true if the list of objs contains a certain object
+        boolean output = false;
+        if (objs.contains(search))
+        {
+            output = true;
+        }
+        return output;
     }
     
     public String randomEnemy() //Returns random enemy
@@ -289,12 +323,14 @@ public class Room
             {
                 output += "W ";
             }
-            output += "\n";
             if (enemyList.size() > 0)
             {
-                output += getEnemyList();
+                output += "\n" + getEnemyList();
             }
-
+            if (objs.size() > 0)
+            {
+                output += "\n" + getObjs();
+            }
             output += "\n";
         }
         else
