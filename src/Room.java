@@ -4,22 +4,26 @@ import java.util.Random;
 
 public class Room
 {
-    static int index;
-    private String name;
-    private String desc;
+    ////////////////////////////// INSTANCE VARIABLES //////////////////////////////
+    private String name; // the name of the room
+    private String desc; // the description that will be displayed upon entering the room
+    
+    // directions the player can exit to
     final private boolean northExit;
     final private boolean eastExit;
     final private boolean southExit;
     final private boolean westExit;
-    private boolean light;
-    private List<String> enemyList;
-    private List<String> interactiveObjs;
+    
+    private boolean light; // if the room is illuminated or not
+    private List<String> enemyList; // list of enemies present in the room
+    private List<String> interactiveObjs; // list of things the player can interact with
 
-    //zero arg constructor
+    ////////////////////////////// CONSTRUCTORS //////////////////////////////
+    // Default Constructor
     public Room()
     {
         name = "";
-        desc = "";
+        desc = ""; 
         northExit = false;
         eastExit = false;
         southExit = false;
@@ -30,9 +34,9 @@ public class Room
 
     }
 
-    //full constructor
+    //Full Constructor
     public Room(String name, String desc, boolean northExit, boolean eastExit, boolean southExit,
-                boolean westExit, boolean light, List<String> enemyList, List<String> interactiveObjs)
+    boolean westExit, boolean light, List<String> enemyList, List<String> interactiveObjs)
     {
         this.name = name;
         this.desc = desc;
@@ -43,10 +47,9 @@ public class Room
         this.light = light;
         this.enemyList = new ArrayList<>(enemyList);
         this.interactiveObjs = new ArrayList<>(interactiveObjs);
-
     }
 
-    //getters
+    ////////////////////////////// GETTERS //////////////////////////////
     public String getName()
     {
         return name;
@@ -81,8 +84,54 @@ public class Room
     {
         return light;
     }
+
+    public int getEnemyCount()
+    {
+        return enemyList.size();
+    }
     
-    public String getInteractiveObjs() 
+    public String getEnemy(int index) 
+    {
+        // returns the enemy at a specific index of enemyList
+        return enemyList.get(index);
+    }
+    
+    public int getEnemyIndex(String search)
+    {
+        // returns the index of an enemy within enemyList
+        return enemyList.indexOf(search);
+    }
+    
+    public boolean enemyListContains(String search)
+    {
+        //returns true if the enemyList contains a certain enemy
+        boolean output = false;
+        if (enemyList.contains(search))
+        {
+            output = true;
+        }
+        return output;
+    }
+
+    ////////////////////////////// SETTERS ////////////////////////////// 
+    public void setLight(boolean light)
+    {
+        this.light = light;
+    }
+    
+    public void addInteractiveObj(String obj)
+    {
+        interactiveObjs.add(obj);
+    }
+    
+    public void removeEnemy(int index)
+    {
+        //removes an enemy at a certain index of enemyList
+        enemyList.remove(index);
+    }
+    
+    ////////////////////////////// TO STRING //////////////////////////////
+    public String getInteractiveObjs() //outputs a list of interactive objects in the room
     {
         String output = "";
         if (!interactiveObjs.isEmpty()) 
@@ -101,35 +150,10 @@ public class Room
                 output += "and a " + interactiveObjs.get(interactiveObjs.size() - 1) + ".";
             }
         }
-    return output;
-    }
-
-    public int getEnemyCount()
-    {
-        return enemyList.size();
-    }
-    
-    public String getEnemy(int index)
-    {
-        return enemyList.get(index);
-    }
-    
-    public int getEnemyIndex(String search)
-    {
-        return enemyList.indexOf(search);
-    }
-    
-    public boolean enemyListContains(String search)
-    {
-        boolean output = false;
-        if (enemyList.contains(search))
-        {
-            output = true;
-        }
         return output;
     }
-
-    public String getEnemyList() 
+    
+    public String getEnemyList() // outputs the list of enemies in the room
     {
         String output = "";
         if (!enemyList.isEmpty()) 
@@ -148,28 +172,16 @@ public class Room
                 output += "and a " + enemyList.get(enemyList.size() - 1) + ".";
             }
         }
-    return output;
-    }
-
-    //setters
-    public void setLight(boolean light)
-    {
-        this.light = light;
+        return output;
     }
     
-    public void addInteractiveObj(String obj)
-    {
-        interactiveObjs.add(obj);
-    }
-    
-    //to string
     public String roomState()
     {
         String output = "\n-----" + name + "-----\n";
-        if (light)
+        if (light) // checks to see if the room has light
         {
             output += desc;
-            //conditional to list out possible exits
+            // lists out possible exits
             output += "\nExits: ";
             if (northExit)
             {
@@ -206,22 +218,20 @@ public class Room
         return output;
     }
 
-
-    public boolean ambushCheck(String playerClass)
+    public boolean ambushCheck(String playerClass) // calculates and returns true if the player is ambushed
     {
-        int chance = Game.generator.nextInt(11)+1;//1 to 10
+        int chance = Game.generator.nextInt(11) + 1; // 1 - 10
         boolean ambush = false;
         int bonus = 0;
-        if (playerClass.equals("mercenary"))
+        if (playerClass.equals("mercenary")) // mercenaries have a decreased chance of being ambushed
         {
             bonus = 2;
         }
-        
-        if (enemyList.size()>0)
+        if (enemyList.size() > 0) // player can only get ambushed when enemies are present
         {
-            if (light)
+            if (light) // odds of getting ambushed change depending on whether the room is lit up or not
             {
-                if (chance >= 5 + bonus) //50 50 chance
+                if (chance >= 5 + bonus) //50% chance (30% if mercenary)
                 {
                     ambush = true;
                 }
@@ -232,7 +242,7 @@ public class Room
             }
             else
             {
-                if (chance >= 3 + bonus) //70 30 chance
+                if (chance >= 3 + bonus) // 70% chance (50% chance if mercenary)
                 {
                     ambush = true;
                 }
@@ -245,20 +255,15 @@ public class Room
         return ambush;
     }
     
-    public String enemyCheck() //Returns random enemy
+    public String randomEnemy() //Returns random enemy
     {
         String result;
-        index = Game.generator.nextInt(enemyList.size());
+        int index = Game.generator.nextInt(enemyList.size());
         result = enemyList.get(index);
         return result;
     }
     
-    public void removeEnemy(int index)
-    {
-        enemyList.remove(index);
-    }
-    
-    public boolean canMove(String direction)
+    public boolean canMove(String direction) // returns true if the player can move in a certain direction
     {
         boolean output = false;
         if ((direction.equals("north") || direction.equals("n")) && northExit)
@@ -279,5 +284,4 @@ public class Room
         }
         return output;
     }
-    
 }
