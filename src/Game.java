@@ -9,12 +9,15 @@ public class Game
     // STATIC VARIABLES
     static boolean fighting = false;
     static String enemyAttacking = "";
+    static boolean intentionalFight = false;
     static String currentObj = "";
     static boolean guarding = false;
     static int damage;
     static String playerName = "";
     static String playerClass = "";
     static int turn;
+    static String input; // will be used to store scanner input
+
     
     // STATUS EFFECTS
     static boolean enemyBurning = false;
@@ -22,6 +25,10 @@ public class Game
     
     // RANDOM OBJECT
     static Random generator = new Random();
+    
+    // SCANNER OBJECT
+    static Scanner scan = new Scanner (System.in);
+
     
     ////////////////////////////// ROOM OBJECTS //////////////////////////////
     static Room entrance = new Room("Entrance", 
@@ -68,11 +75,7 @@ public class Game
         boolean firstTurn = true;
         boolean firstBattle = true;
         boolean allowedMove = false;
-        boolean intentionalFight = false;
-        String input; // will be used to store scanner input
-
-        Scanner scan = new Scanner (System.in); // scanner object
-
+        
         // PLAYER CLASS DESCRIPTIONS
         String mercDesc = "Mercenaries deal in close combat, making them more vulnerable to attacks,"
         + "\nbut their stealth lets them walk around unnoticed.";
@@ -556,52 +559,12 @@ public class Game
                 
                 if (input.equals("use"))
                 {
-                    System.out.println("What do you want to use?");
+                    useCommand();
                 }
                 
                 if (input.equals("fight") || input.equals("attack"))
                 {
-                    if (currentRoom.getEnemyCount() > 0) // checks if there's more than one enemy in the room
-                    {
-                        if (currentRoom.getEnemyCount() == 1) // if there's only 1 enemy, the code to choose which enemy to attack is unnecessary
-                        {
-                            enemyAttacking = currentRoom.getEnemy(0);
-                            System.out.println("\nYou attack the " + enemyAttacking + "!");
-                            
-                            copyEnemyObjects();
-                            fighting = true;
-                            intentionalFight = true; // will ensure the code to check to see if the player is ambushed does not run
-                        }
-                        else
-                        {
-                            System.out.println("\n" + currentRoom.getEnemyList());
-                            System.out.println("\nWhich enemy will you attack?");
-                            
-                            input = scan.nextLine();
-                            input = input.toLowerCase();
-                            
-                            System.out.println("\n> " + input);
-                            
-                            if (currentRoom.enemyListContains(input))
-                            {
-                                enemyAttacking = currentRoom.getEnemy(currentRoom.getEnemyIndex(input));
-                                System.out.println("You attack the " + enemyAttacking + "!");
-                                
-                                copyEnemyObjects();
-                                
-                                fighting = true;
-                                intentionalFight = true;
-                            }
-                            else
-                            {
-                                System.out.println("\nInvalid name.");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        System.out.println("\nThere are no enemies nearby.");
-                    }
+                    fightCommand();
                     
                 }
                 
@@ -706,6 +669,82 @@ public class Game
         if (enemyAttacking.equals("feral hound"))
         {
             currentRoom.addObj("feral hound corpse");
+        }
+    }
+    
+    public static void fightCommand()
+    {
+        if (currentRoom.getEnemyCount() > 0) // checks if there's more than one enemy in the room
+        {
+            if (currentRoom.getEnemyCount() == 1) // if there's only 1 enemy, the code to choose which enemy to attack is unnecessary
+            {
+                enemyAttacking = currentRoom.getEnemy(0);
+                System.out.println("\nYou attack the " + enemyAttacking + "!");
+                            
+                copyEnemyObjects();
+                fighting = true;
+                intentionalFight = true; // will ensure the code to check to see if the player is ambushed does not run
+            }
+            else
+            {
+                System.out.println("\n" + currentRoom.getEnemyList());
+                System.out.println("\nWhich enemy will you attack?");
+                            
+                input = scan.nextLine();
+                input = input.toLowerCase();
+                            
+                System.out.println("\n> " + input);
+                            
+                if (currentRoom.enemyListContains(input))
+                {
+                    enemyAttacking = currentRoom.getEnemy(currentRoom.getEnemyIndex(input));
+                    System.out.println("You attack the " + enemyAttacking + "!");
+                                
+                    copyEnemyObjects();
+                                
+                    fighting = true;
+                    intentionalFight = true;
+                }
+                else
+                {
+                    System.out.println("\nInvalid name.");
+                }
+            }
+        }
+        else
+        {
+            System.out.println("\nThere are no enemies nearby.");
+        }
+    }
+    
+    public static void useCommand()
+    {
+        System.out.println(player.openInventory());
+        if (player.inventorySize() > 0) // checks if the player has anything
+        {
+           System.out.println("\nWhat do you want to use?");
+        
+            input = scan.nextLine();
+            input = input.toLowerCase();
+            
+            System.out.println("\n> " + input);
+        
+            if (input == "blue herb")
+            {
+                if (player.hasItem(input))
+                {
+                    System.out.println("You use the " + input + ".");
+                    player.addHp(30); // blue herb adds 30 hp
+                }
+                else
+                {
+                    System.out.println("You don't have a blue herb to use!");
+                }
+            }
+            else
+            {
+                System.out.println("\nInvalid item.");
+            }
         }
     }
 } // end main class
