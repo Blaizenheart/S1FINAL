@@ -280,7 +280,11 @@ public class Actor
     
     public int spellDmgCalc(String spell) // calculates the damage of a spell
     {
-        int damage = atk;
+        int damage = (int) (atk * level * 0.7);
+        if (level == 1)
+        {
+            damage = atk;
+        }
         if (playerClass.equals("darkPriest")) //dark priests get extra damage when casting spells
         {
             damage += 20;
@@ -393,7 +397,8 @@ public class Actor
     public String hpVisual() // creates a visual for the actor's hp bar
     {
         String output = "\n[";
-        double percent = ((double) hp / maxHp) * 100; // calculates the percentage the actor's hp is at
+        // calculates the percentage the actor's hp is at
+        double percent = ((double) hp / maxHp) * 100; 
         int count = (int) Math.round(percent / 10); // reduces the size of the hp visual by 10
         for (int i = 0; i < count; i++)
         {
