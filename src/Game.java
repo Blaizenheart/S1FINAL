@@ -22,8 +22,8 @@ public class Game
     static Random generator = new Random();
     
     ////////////////////////////// ROOM OBJECTS //////////////////////////////
-    static Room entrance = new Room("Entrance", "You stand in front of a decrepit dungeon. The mist is getting thicker...", true, false, false, false, true, new ArrayList<String>(), new ArrayList<String>());
-    static Room courtyard = new Room("Courtyard", "You stand in the middle of a large courtyard. The air hangs still...", true, false, true, true, true, List.of("feral hound"), new ArrayList<String>());
+    static Room entrance = new Room("Entrance", "You stand in front of a decrepit dungeon. The mist is \ntoo thick... there's no turning back now.", true, false, false, false, true, new ArrayList<String>(), new ArrayList<String>());
+    static Room courtyard = new Room("Courtyard", "You stand in the middle of a large, empty courtyard. The air hangs still...", true, false, true, true, true, List.of("feral hound"), new ArrayList<String>());
     static Room currentRoom = new Room(); // will be used to reference different room objects later
     
     ////////////////////////////// ACTOR OBJECTS //////////////////////////////
@@ -128,6 +128,7 @@ public class Game
         
         player.setPlayerClass(playerClass); // sets the playerClass attribute of player object
         
+        scan.nextLine();
         // if-statements to set player attributes based on chosen class
         if (playerClass.equals("mercenary"))
         {
@@ -136,6 +137,9 @@ public class Game
             player.setGold(15);
             player.setWeapon("dagger");
             player.addItem("something");
+            
+            System.out.println("You were hired for a good sum of money to find a military commander that was captured" 
+            + "\nand is being held captive inside of a dungeon on the outskirts of the neighboring country.");
         }
         else if (playerClass.equals("knight"))
         {
@@ -144,6 +148,9 @@ public class Game
             player.setGold(40);
             player.setWeapon("sword");
             player.addItem("something");
+            
+            System.out.println("During the war, your commander had been captured by enemy forces and now, you've taken"
+            + "\nit upon yourself to retrieve him from a dungeon on the outskirts of the neighboring country.");
         }
         else if (playerClass.equals("darkPriest"))
         {
@@ -152,6 +159,9 @@ public class Game
             player.setGold(15);
             player.addItem("something");
             player.addSpell("fireball");
+            System.out.println("You received a vision about a man who had been captured during the war who has the power to" + 
+            "\nunite the different kingdoms. You journeyed out to find this man, stumbling upon a dungeon on the outskirts" + 
+            "\nof the neighboring country.");
         }
         else //outlander
         {
@@ -160,8 +170,11 @@ public class Game
             player.setGold(10);
             player.setWeapon("bow");
             player.addItem("something");
+            System.out.println("Your village had been invaded by a military group, and as a result, you had lost everything" + 
+            "\nyou ever cherised or cared about. You sought out the man responsible for the deaths of your loved ones, which" +
+            "\nbrought you to a dungeon on the outskirts of the neighboring country.");
         }
-        
+        System.out.println("As you near the dungeon, the mist begins to get thicker...\n");
         currentRoom = entrance;
         
         ////////////////////////////// THE GAME //////////////////////////////
@@ -225,7 +238,6 @@ public class Game
                     if (!firstTurn) // if the player doesn't have the first turn
                     {
                         System.out.println("\nYou are ambushed by a " + enemyAttacking + "!");
-                        System.out.println("\n...\n");
                         enemyTurn();
                         
                         // prints the hp visual after the enemy's turn
@@ -552,6 +564,10 @@ public class Game
         if (currentRoom.getName().equals("Entrance") && (direction.equals("north") || direction.equals("n")))
         {
             currentRoom = courtyard;
+        }
+        else if (currentRoom.getName().equals("courtyard") && (direction.equals("south") || direction.equals("s")))
+        {
+            currentRoom = entrance;
         }
     }
     
