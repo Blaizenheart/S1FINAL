@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
 
+
 public class Game
 {
     // STATIC VARIABLES
@@ -21,7 +22,7 @@ public class Game
     static Random generator = new Random();
     
     ////////////////////////////// ROOM OBJECTS //////////////////////////////
-    static Room entrance = new Room("Entrance", "You stand in front of a decrepit dungeon. The mist is getting thicker.", true, false, false, false, true, new ArrayList<String>(), new ArrayList<String>());
+    static Room entrance = new Room("Entrance", "You stand in front of a decrepit dungeon. The mist is getting thicker...", true, false, false, false, true, new ArrayList<String>(), new ArrayList<String>());
     static Room courtyard = new Room("Courtyard", "You stand in the middle of a large courtyard. The air hangs still...", true, false, true, true, true, List.of("feral hound"), new ArrayList<String>());
     static Room currentRoom = new Room(); // will be used to reference different room objects later
     
@@ -94,7 +95,7 @@ public class Game
         while (confirming)
         {
             int input2 = scan.nextInt();
-            System.out.println("\n>" + input2);
+            System.out.println("\n> " + input2);
             if (input2 == 1)
             {
                 System.out.println("\nYou have chosen the Mercenary class.");
@@ -154,7 +155,7 @@ public class Game
         }
         else //outlander
         {
-            player.setAtk(30);
+            player.setAtk(20);
             player.setDef(20);
             player.setGold(10);
             player.setWeapon("bow");
@@ -173,7 +174,6 @@ public class Game
                if (currentRoom.ambushCheck(playerClass)) // checks to see if the player is going to get ambushed 
                 {
                     enemyAttacking = currentRoom.randomEnemy();
-                    System.out.println("You are ambushed by a " + enemyAttacking + "!");
                     
                     fighting = true;
                     firstTurn = false; // the enemy will get the first turn of the battle
@@ -202,6 +202,9 @@ public class Game
                     System.out.println("It seems like you've entered your first battle!\n");
                     System.out.println("Every turn, you get the option to [ATTACK], use [SPELLS], \n[GUARD], use an [ITEM], or [FLEE] if you're a coward.\n");
                     System.out.println("Watch your HP! When it becomes 0, it's GAME OVER.\n");
+                    
+                    System.out.println("\n...\n");
+                    scan.nextLine();
                     firstBattle = false; // so the tutorial doesn't print again
                 }
                 
@@ -221,11 +224,15 @@ public class Game
                     
                     if (!firstTurn) // if the player doesn't have the first turn
                     {
+                        System.out.println("\nYou are ambushed by a " + enemyAttacking + "!");
+                        System.out.println("\n...\n");
                         enemyTurn();
                         
                         // prints the hp visual after the enemy's turn
                         System.out.println("\n" + player.getName().toUpperCase() + " HP: " + player.hpVisual());
                         System.out.println("\n" + enemy.getName().toUpperCase() + " HP: " + enemy.hpVisual());
+                        
+                        scan.nextLine();
                         
                         // if the player or enemy is dead the fighting ends
                         if (player.isDead())
@@ -242,7 +249,8 @@ public class Game
                     if (fighting) // if the player dies from an enemy's turn above then this code is skipped over
                     {
                         playerTurn = true;
-                        System.out.println("\nYOUR TURN\n");
+                        System.out.println("\n///////////////YOUR TURN///////////////\n");
+                        System.out.println("[Attack]  [Spells]  [Guard]  [Item]  [Flee]\n");
                         
                         // start of player turn
                         while (playerTurn) // repeats until the player has inputted a valid command
@@ -250,7 +258,7 @@ public class Game
                             input = scan.nextLine();
                             input = input.toLowerCase();
                     
-                            System.out.println("\n>" + input);
+                            System.out.println("\n> " + input);
                     
                             if (input.equals("attack"))
                             {
@@ -274,7 +282,7 @@ public class Game
                                 
                                 input = scan.nextLine();
                                 input = input.toLowerCase();
-                                System.out.println("\n>" + input);
+                                System.out.println("\n> " + input);
                                 
                                 if (input.equals("fireball")) // very long if-statement for each spell the player can cast
                                 {
@@ -320,7 +328,7 @@ public class Game
                                 
                                 input = scan.nextLine();
                                 input = input.toLowerCase();
-                                System.out.println("\n>" + input);
+                                System.out.println("\n> " + input);
                                 // very long if-statement for each item
                             }
                             else if (input.equals("flee") || input.equals("run"))
@@ -355,6 +363,9 @@ public class Game
                     
                     if (fighting) // skips enemy turn if the fight has ended
                     {
+                        System.out.println("\n...\n");
+                        scan.nextLine();
+                        
                         // enemy turn
                         enemyTurn();
                         
@@ -380,6 +391,9 @@ public class Game
                     System.out.println("\nYou are victorious!");
                     currentRoom.removeEnemy(currentRoom.getEnemyIndex(enemyAttacking)); // removes the dead enemy from the room's enemylist
                     intentionalFight = false; // resets for the next fight
+                    
+                    System.out.println("\n...\n");
+                    scan.nextLine();
                 }
             }
             else
@@ -388,7 +402,7 @@ public class Game
                 input = input.toLowerCase();
                 timeCount++; // increases this counter for every "turn" the player takes within a room
 
-                System.out.println("\n>" + input);
+                System.out.println("\n> " + input);
                 
                 ////////////////////////////// COMMANDS //////////////////////////////
                 // each turn outside of combat lets the player input commands to do different things
@@ -412,7 +426,7 @@ public class Game
                     input = scan.nextLine();
                     input = input.toLowerCase();
                     
-                    System.out.println("\n>" + input);
+                    System.out.println("\n> " + input);
                     
                     allowedMove = currentRoom.canMove(input); // checks to see if the player can move in that direction
                     if (allowedMove)
@@ -498,7 +512,7 @@ public class Game
                             input = scan.nextLine();
                             input = input.toLowerCase();
                             
-                            System.out.println("\n>" + input);
+                            System.out.println("\n> " + input);
                             
                             if (currentRoom.enemyListContains(input))
                             {
@@ -550,13 +564,13 @@ public class Game
            factor = 5; 
         }
 
-        System.out.println("\nENEMY TURN\n");
+        System.out.println("\n///////////////ENEMY TURN///////////////\n");
         
         // if-statement for text for different enemies
         if (enemy.getName().equals("feral hound"))
         {
             System.out.println("\nThe feral hound growls at you...");
-            System.out.println("\nIt lunges at you!");
+            System.out.println("It lunges at you!");
         }
                         
         if (enemy.enemyMissChance(playerClass)) // sees if the enemy misses its attack
