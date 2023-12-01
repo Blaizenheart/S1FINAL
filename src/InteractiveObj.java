@@ -31,7 +31,7 @@ public class InteractiveObj
         this.locked = locked;
         this.lootable = lootable;
         this.readable = readable;
-        this.items = new ArrayList<>(itemsList);
+        this.itemsList = new ArrayList<>(itemsList);
     }
     
     ////////////////////////////// GETTERS //////////////////////////////
@@ -78,7 +78,7 @@ public class InteractiveObj
     
     public void setLoot()
     {
-        loot = false;
+        lootable = false;
     }
     
     public void removeItem(int index)
