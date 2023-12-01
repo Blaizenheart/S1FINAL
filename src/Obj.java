@@ -1,36 +1,36 @@
 import java.util.List;
 import java.util.ArrayList;
 
-public class InteractiveObj
+public class Obj
 {
     ////////////////////////////// INSTANCE VARIABLES //////////////////////////////
     private String name;
-    private String desc;
-    private boolean locked;
+    private String desc; // description to print for the player upon using the "examine (object)" command
+    private boolean locked; // is it locked?
     private boolean lootable;
-    private boolean readable;
-    private List<String> itemsList;
+    private boolean obtainable; // can you take it?
+    private List<String> itemsList; // items that could be inside of the object
     
     ////////////////////////////// CONSTRUCTORS //////////////////////////////
     // Default Constructor
-    public InteractiveObj()
+    public Obj()
     {
         name = "";
         desc = "";
         locked = false;
         lootable = false;
-        readable = false;
+        obtainable = false;
         itemsList = new ArrayList<>();
     }
     
     // Full Constructor
-    public InteractiveObj(String name, String desc, boolean locked, boolean lootable, boolean readable, List<String> itemsList)
+    public Obj(String name, String desc, boolean locked, boolean lootable, boolean obtainable, List<String> itemsList)
     {
         this.name = name;
         this.desc = desc;
         this.locked = locked;
         this.lootable = lootable;
-        this.readable = readable;
+        this.obtainable = obtainable;
         this.itemsList = new ArrayList<>(itemsList);
     }
     
@@ -55,9 +55,9 @@ public class InteractiveObj
         return lootable;
     }
     
-    public boolean isReadable()
+    public boolean isObtainable()
     {
-        return readable;
+        return obtainable;
     }
     
     public boolean containsItems()
@@ -85,6 +85,8 @@ public class InteractiveObj
     {
         itemsList.remove(index);
     }
+    
+    ////////////////////////////// BRAIN METHODS //////////////////////////////
     
     ////////////////////////////// TO STRING //////////////////////////////
     public String getItems() //meant to output the items inside the interactive obj (usually some kind of container)
