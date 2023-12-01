@@ -84,23 +84,23 @@ public class InteractiveObj
     }
     
     ////////////////////////////// TO STRING //////////////////////////////
-    public String getInteractiveObjs() //outputs a list of interactive objects in the room
+    public String getItems() //outputs a list of interactive objects in the room
     {
         String output = "";
-        if (!interactiveObjs.isEmpty()) 
+        if (!itemsList.isEmpty()) 
         {
             output = "There is ";
-            if (interactiveObjs.size() == 1) 
+            if (itemsList.size() == 1) 
             {
-                output += "a " + interactiveObjs.get(0) + ".";
+                output += "a " + itemsList.get(0) + ".";
             } 
             else 
             {
-                for (int i = 0; i < interactiveObjs.size() - 1; i++) 
+                for (int i = 0; i < itemsList.size() - 1; i++) 
                 {
-                    output += interactiveObjs.get(i) + ", ";
+                    output += itemsList.get(i) + ", ";
                 }
-                output += "and a " + interactiveObjs.get(interactiveObjs.size() - 1) + ".";
+                output += "and a " + itemsList.get(itemsList.size() - 1) + ".";
             }
         }
         return output;
