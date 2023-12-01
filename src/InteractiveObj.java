@@ -1,3 +1,6 @@
+import java.util.List;
+import java.util.ArrayList;
+
 public class InteractiveObj
 {
     ////////////////////////////// INSTANCE VARIABLES //////////////////////////////
@@ -84,12 +87,12 @@ public class InteractiveObj
     }
     
     ////////////////////////////// TO STRING //////////////////////////////
-    public String getItems() //outputs a list of interactive objects in the room
+    public String getItems() //meant to output the items inside the interactive obj (usually some kind of container)
     {
         String output = "";
         if (!itemsList.isEmpty()) 
         {
-            output = "There is ";
+            output = "Inside the " + name + " is ";
             if (itemsList.size() == 1) 
             {
                 output += "a " + itemsList.get(0) + ".";
