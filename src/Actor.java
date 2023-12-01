@@ -6,20 +6,23 @@ import java.util.Random;
 public class Actor
 {
     ////////////////////////////// INSTANCE VARIABLES //////////////////////////////
-    private String name;
-    private int level;
-    private int xp;
-    private int atk;
-    private int hp;
-    private int maxHp;
-    private int def;
-    private String weapon;
-    private String playerClass;
-    private int gold;
-    private List<String> inventory;
-    private List<String> spellsList;
-    private boolean deathState;
-
+    private String name; // the actor's name
+    private int level; // the actor's level
+    private int xp; // the amount of xp accumulated
+    
+    private int atk; // the actor's attack stat
+    private int hp; // amount of hit points the actor currently has
+    private int maxHp; // the maximum amount of hit points the actor can have
+    private int def; // the actor's defense stat
+    
+    private String weapon; // the weapon the actor has equipped
+    private String playerClass; // the player's class (mercenary/knight/darkPriest/outlander)
+    private int gold; // the amount of gold pieces the actor has
+    
+    private List<String> inventory; // the actor's posessions
+    private List<String> spellsList; // the spells the actor knows
+    
+    private boolean deathState; // true -> dead, false -> alive
 
     ////////////////////////////// CONSTRUCTORS //////////////////////////////
     //Default Constructor
@@ -38,10 +41,9 @@ public class Actor
         inventory = new ArrayList<>();
         spellsList = new ArrayList<>();
         deathState = false;
-
     }
     
-    //Full Constructor (player only)
+    //Full Constructor (used for the player only)
     public Actor(String name, int level, int xp, int atk, int hp, int maxHp, int def, String weapon, String playerClass, int gold, List<String> inventory, List<String> spellsList, boolean deathState)
     {
         this.name = name;
@@ -129,7 +131,6 @@ public class Actor
         return deathState;
     }
     
-    
     ////////////////////////////// SETTERS //////////////////////////////
     public void setName(String name)
     {
@@ -175,21 +176,20 @@ public class Actor
     {
         this.gold = gold;
     }
-
-    ////////////////////////////// BRAIN METHODS //////////////////////////////
-    public void addItem(String item)
+    
+    public void addItem(String item) // adds an item to the actor's inventory
     {
         inventory.add(item);
     }
     
-    public void addSpell(String spell)
+    public void addSpell(String spell) // adds a spell to the actor's spells list
     {
         spellsList.add(spell);
     }
-        
-    public void addHp(int hpAdd)
+    
+    public void addHp(int hpAdd) // adds health
     {
-        if ((hp + hpAdd) > maxHp) //HP CAP
+        if ((hp + hpAdd) > maxHp) // checks to see if the health added would exceed max hp
         {
             hp = maxHp;
         }
@@ -201,32 +201,34 @@ public class Actor
     
     public void subHp(int hpSub)
     {
-        this.hp = hp - hpSub;
+        if ((hp - hpSub) < 0) // checks to see if the health subtracted would be below 0
+        {
+            hp = 0;
+        }
+        else
+        {
+            hp -= hpSub;
+        }
     }
     
     public void addGold(int goldAdd)
     {
-        this.gold += goldAdd;
+        gold += goldAdd;
     }
     
     public void subGold(int goldSub)
     {
-        if ((gold - goldSub) <= 0)
-        {
-            gold = 0;
-        }
-        else
-        {
-            gold -= goldSub;
-        }
+        gold -= goldSub;
     }
     
-    public boolean hasSpell(String spellName)
+    ////////////////////////////// BRAIN METHODS //////////////////////////////
+    
+    public boolean hasSpell(String spellName) // checks to see if the player has a certain spell
     {
         return spellsList.contains(spellName);
     }
     
-    public boolean isDead()
+    public boolean isDead() // checks to see if the actor is dead
     {
         boolean result = false;
         if (hp <= 0)
@@ -237,10 +239,10 @@ public class Actor
         return result;
     }
     
-    public int dmgCalc()
+    public int dmgCalc() // calculates the amount of damage done
     {
         int damage;
-        int additionalAtk; //Weapons increase atk
+        int additionalAtk; // weapons increase base atk
         if (weapon.equals("dagger"))
         {
             additionalAtk = 10;
@@ -262,9 +264,12 @@ public class Actor
             additionalAtk = 0;
         }
         damage = atk + additionalAtk;
-        damage *= 10;
+        
+        // arbitrary damage calculations
+        damage *= 10; 
         damage /= 2;
-        //Variation
+        
+        // variation in damage
         damage += Game.generator.nextInt(41)-20;
         if (damage <= 0)
         {
@@ -273,15 +278,21 @@ public class Actor
         return damage;
     }
     
-    public int spellDmgCalc(String spell)
+    public int spellDmgCalc(String spell) // calculates the damage of a spell
     {
         int damage = atk;
+        if (playerClass.equals("darkPriest")) //dark priests get extra damage when casting spells
+        {
+            damage += 20;
+        }
         if (spell.equals("fireball"))
         {
             damage += 10;
             damage *= 10;
             damage /= 2;
         }
+        
+        // variation in damage
         damage += Game.generator.nextInt(41)-20;
         if (damage <= 0)
         {
@@ -290,24 +301,24 @@ public class Actor
         return damage;
     }
     
-    public boolean missChance()
+    public boolean missChance() //calculates if the actor misses an attack
     {
         boolean result = false;
         int chance = Game.generator.nextInt(11)+1;
-        if (chance == 1)
+        if (chance == 1) // 10% chance to miss attacks
         {
             result = true;
         }
         return result;
     }
     
-    public boolean enemyMissChance(String playerClass)
+    public boolean enemyMissChance(String playerClass) // calculates if the enemy misses an attack
     {
         boolean result = false;
         int chance = Game.generator.nextInt(11)+1;
-        if (playerClass == "outlander")
+        if (playerClass == "outlander") // enemies are more likely to miss attacks against outlanders
         {
-            if (chance == 5)
+            if (chance >= 5)
             {
                 result = true;
             }
@@ -322,11 +333,11 @@ public class Actor
         return result;
     }
     
-    public boolean runChance()
+    public boolean runChance() // calculates whether the player is successful in running away
     {
         boolean result = false;
         int chance = Game.generator.nextInt(11)+1;
-        if (chance > 5)
+        if (chance > 5) // 50% chance
         {
             result = true;
         }
@@ -334,8 +345,7 @@ public class Actor
     }
     
     ////////////////////////////// TO STRING //////////////////////////////
-
-    public String openInventory()
+    public String openInventory() // displays the player's inventory
     {
         String output = "\n-----INVENTORY-----\n";
         for (String item : inventory)
@@ -345,7 +355,7 @@ public class Actor
         return output;
     }
 
-    public String openSpells()
+    public String openSpells() // displays the list of spells the player knows
     {
         String output = "\n-----SPELLS-----\n";
         for (String spell : spellsList)
@@ -355,7 +365,7 @@ public class Actor
         return output;
     }
 
-    public String openProfile()
+    public String openProfile() // prints the player's information, stats, inventory, and spells list
     {
         String output = "\n-----PROFILE-----\n";
         output += "Name: " + name;
@@ -380,15 +390,17 @@ public class Actor
         return output;
     }
     
-    public String hpVisual() 
+    public String hpVisual() // creates a visual for the actor's hp bar
     {
         String output = "\n[";
-        double percent = ((double) hp / maxHp) * 100;
-        int count = (int) Math.round(percent / 10); // 1-10
-        for (int i = 0; i < count; i++) {
+        double percent = ((double) hp / maxHp) * 100; // calculates the percentage the actor's hp is at
+        int count = (int) Math.round(percent / 10); // reduces the size of the hp visual by 10
+        for (int i = 0; i < count; i++)
+        {
             output += "X";
         }
-        for (int j = 0; j < 10 - count; j++) {
+        for (int j = 0; j < 10 - count; j++)
+        {
             output += "-";
         }
         output += "]";
