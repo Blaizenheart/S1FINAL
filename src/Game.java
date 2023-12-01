@@ -139,7 +139,8 @@ public class Game
             player.addItem("something");
             
             System.out.println("You were hired for a good sum of money to find a military commander that was captured" 
-            + "\nand is being held captive inside of a dungeon on the outskirts of the neighboring country.");
+            + "\nand is being held captive inside of a dungeon on the outskirts of the" 
+            + "\nneighboring country.");
         }
         else if (playerClass.equals("knight"))
         {
@@ -150,7 +151,8 @@ public class Game
             player.addItem("something");
             
             System.out.println("During the war, your commander had been captured by enemy forces and now, you've taken"
-            + "\nit upon yourself to retrieve him from a dungeon on the outskirts of the neighboring country.");
+            + "\nit upon yourself to retrieve him from a dungeon on the outskirts of the" +
+            "\nneighboring country.");
         }
         else if (playerClass.equals("darkPriest"))
         {
@@ -160,8 +162,8 @@ public class Game
             player.addItem("something");
             player.addSpell("fireball");
             System.out.println("You received a vision about a man who had been captured during the war who has the power to" + 
-            "\nunite the different kingdoms. You journeyed out to find this man, stumbling upon a dungeon on the outskirts" + 
-            "\nof the neighboring country.");
+            "\nunite the different kingdoms. You journeyed out to find this man, stumbling upon a"
+            +"\ndungeon on the outskirts of the neighboring country.");
         }
         else //outlander
         {
@@ -171,8 +173,9 @@ public class Game
             player.setWeapon("bow");
             player.addItem("something");
             System.out.println("Your village had been invaded by a military group, and as a result, you had lost everything" + 
-            "\nyou ever cherised or cared about. You sought out the man responsible for the deaths of your loved ones, which" +
-            "\nbrought you to a dungeon on the outskirts of the neighboring country.");
+            "\nyou ever cherised or cared about. You sought out the man responsible for the deaths"+
+            "\nof your loved ones, which brought you to a dungeon on the outskirts of the"+
+            "\nneighboring country.");
         }
         System.out.println("As you near the dungeon, the mist begins to get thicker...\n");
         currentRoom = entrance;
