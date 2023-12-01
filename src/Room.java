@@ -9,14 +9,14 @@ public class Room
     private String desc; // the description that will be displayed upon entering the room
     
     // directions the player can exit to
-    final private boolean northExit;
-    final private boolean eastExit;
-    final private boolean southExit;
-    final private boolean westExit;
+    private boolean northExit;
+    private boolean eastExit;
+    private boolean southExit;
+    private boolean westExit;
     
     private boolean light; // if the room is illuminated or not
     private List<String> enemyList; // list of enemies present in the room
-    private List<String> interactiveObjs; // list of things the player can interact with
+    private List<String> objs; // list of things the player can interact with
 
     ////////////////////////////// CONSTRUCTORS //////////////////////////////
     // Default Constructor
@@ -30,13 +30,13 @@ public class Room
         westExit = false;
         light = false;
         enemyList = new ArrayList<>();
-        interactiveObjs = new ArrayList<>();
+        objs = new ArrayList<>();
 
     }
 
     //Full Constructor
     public Room(String name, String desc, boolean northExit, boolean eastExit, boolean southExit,
-    boolean westExit, boolean light, List<String> enemyList, List<String> interactiveObjs)
+    boolean westExit, boolean light, List<String> enemyList, List<String> objs)
     {
         this.name = name;
         this.desc = desc;
@@ -46,7 +46,7 @@ public class Room
         this.westExit = westExit;
         this.light = light;
         this.enemyList = new ArrayList<>(enemyList);
-        this.interactiveObjs = new ArrayList<>(interactiveObjs);
+        this.objs = new ArrayList<>(objs);
     }
 
     ////////////////////////////// GETTERS //////////////////////////////
@@ -119,9 +119,29 @@ public class Room
         this.light = light;
     }
     
-    public void addInteractiveObj(String obj)
+    public void setNorthExit(boolean state)
     {
-        interactiveObjs.add(obj);
+        northExit = state;
+    }
+    
+    public void setEastExit(boolean state)
+    {
+        eastExit = state;
+    }
+    
+    public void setSouthExit(boolean state)
+    {
+        southExit = state;
+    }
+    
+    public void setWestExit(boolean state)
+    {
+        westExit = state;
+    }
+    
+    public void addObj(String obj)
+    {
+        objs.add(obj);
     }
     
     public void removeEnemy(int index)
@@ -130,24 +150,94 @@ public class Room
         enemyList.remove(index);
     }
     
+    ////////////////////////////// BRAIN METHODS //////////////////////////////
+    public boolean ambushCheck(String playerClass) 
+    { // calculates and returns true if the player is ambushed
+        int chance = Game.generator.nextInt(11) + 1; // 1 - 10
+        boolean ambush = false;
+        int bonus = 0;
+        // mercenaries have a decreased chance of being ambushed
+        if (playerClass.equals("mercenary")) 
+        {
+            bonus = 2;
+        }
+        if (enemyList.size() > 0) // player can only get ambushed when enemies are present
+        {
+            // odds of getting ambushed change depending on whether the room is lit up or not
+            if (light) 
+            {
+                if (chance >= 5 + bonus) //50% chance (30% if mercenary)
+                {
+                    ambush = true;
+                }
+                else
+                {
+                    ambush = false;
+                }
+            }
+            else
+            {
+                if (chance >= 3 + bonus) // 70% chance (50% chance if mercenary)
+                {
+                    ambush = true;
+                }
+                else
+                {
+                    ambush = false;
+                }
+            }
+        }
+        return ambush;
+    }
+    
+    public String randomEnemy() //Returns random enemy
+    {
+        String result;
+        int index = Game.generator.nextInt(enemyList.size());
+        result = enemyList.get(index);
+        return result;
+    }
+    
+    public boolean canMove(String direction) 
+    { // returns true if the player can move in a certain direction
+        boolean output = false;
+        if ((direction.equals("north") || direction.equals("n")) && northExit)
+        {
+            output = true;
+        }
+        else if ((direction.equals("east") || direction.equals("e")) && eastExit)
+        {
+            output = true;
+        }
+        else if ((direction.equals("south") || direction.equals("s")) && southExit)
+        {
+            output = true;
+        }
+        else if ((direction.equals("west") || direction.equals("w")) && westExit)
+        {
+            output = true;
+        }
+        return output;
+    }
+    
     ////////////////////////////// TO STRING //////////////////////////////
-    public String getInteractiveObjs() //outputs a list of interactive objects in the room
+    public String getObjs() //outputs a list of interactive objects in the room
     {
         String output = "";
-        if (!interactiveObjs.isEmpty()) 
+        if (!objs.isEmpty()) 
         {
             output = "There is ";
-            if (interactiveObjs.size() == 1) 
+            if (objs.size() == 1) 
             {
-                output += "a " + interactiveObjs.get(0) + ".";
+                output += "a " + objs.get(0) + ".";
             } 
             else 
             {
-                for (int i = 0; i < interactiveObjs.size() - 1; i++) 
+                for (int i = 0; i < objs.size() - 1; i++) 
                 {
-                    output += interactiveObjs.get(i) + ", ";
+                    output += objs.get(i) + ", ";
                 }
-                output += "and a " + interactiveObjs.get(interactiveObjs.size() - 1) + ".";
+                output += "and a " + objs.get(objs.size() - 1) + ".";
             }
         }
         return output;
@@ -199,14 +289,10 @@ public class Room
             {
                 output += "W ";
             }
-            
+            output += "\n";
             if (enemyList.size() > 0)
             {
-                output += "\nThere are " + enemyList.size() + " hostile enemies nearby: ";
-                for (String enemy : enemyList)
-                {
-                    output += enemy;
-                }
+                output += getEnemyList();
             }
 
             output += "\n";
@@ -214,73 +300,6 @@ public class Room
         else
         {
             output += "It's too dark to see anything.";
-        }
-        return output;
-    }
-
-    public boolean ambushCheck(String playerClass) // calculates and returns true if the player is ambushed
-    {
-        int chance = Game.generator.nextInt(11) + 1; // 1 - 10
-        boolean ambush = false;
-        int bonus = 0;
-        if (playerClass.equals("mercenary")) // mercenaries have a decreased chance of being ambushed
-        {
-            bonus = 2;
-        }
-        if (enemyList.size() > 0) // player can only get ambushed when enemies are present
-        {
-            if (light) // odds of getting ambushed change depending on whether the room is lit up or not
-            {
-                if (chance >= 5 + bonus) //50% chance (30% if mercenary)
-                {
-                    ambush = true;
-                }
-                else
-                {
-                    ambush = false;
-                }
-            }
-            else
-            {
-                if (chance >= 3 + bonus) // 70% chance (50% chance if mercenary)
-                {
-                    ambush = true;
-                }
-                else
-                {
-                    ambush = false;
-                }
-            }
-        }
-        return ambush;
-    }
-    
-    public String randomEnemy() //Returns random enemy
-    {
-        String result;
-        int index = Game.generator.nextInt(enemyList.size());
-        result = enemyList.get(index);
-        return result;
-    }
-    
-    public boolean canMove(String direction) // returns true if the player can move in a certain direction
-    {
-        boolean output = false;
-        if ((direction.equals("north") || direction.equals("n")) && northExit)
-        {
-            output = true;
-        }
-        else if ((direction.equals("east") || direction.equals("e")) && eastExit)
-        {
-            output = true;
-        }
-        else if ((direction.equals("south") || direction.equals("s")) && southExit)
-        {
-            output = true;
-        }
-        else if ((direction.equals("west") || direction.equals("w")) && westExit)
-        {
-            output = true;
         }
         return output;
     }
