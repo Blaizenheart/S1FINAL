@@ -1,19 +1,18 @@
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Room
 {
     ////////////////////////////// INSTANCE VARIABLES //////////////////////////////
-    private String name; // the name of the room
-    private String desc; // the description that will be displayed upon entering the room
-    
+    private final String NAME; // the name of the room
+    private final String DESC; // the description that will be displayed upon entering the room
+
     // directions the player can exit to
     private boolean northExit;
     private boolean eastExit;
     private boolean southExit;
     private boolean westExit;
-    
+
     private boolean light; // if the room is illuminated or not
     private List<String> enemyList; // list of enemies present in the room
     private List<String> objs; // list of things the player can interact with
@@ -22,8 +21,8 @@ public class Room
     // Default Constructor
     public Room()
     {
-        name = "";
-        desc = ""; 
+        NAME = "";
+        DESC = "";
         northExit = false;
         eastExit = false;
         southExit = false;
@@ -36,10 +35,10 @@ public class Room
 
     //Full Constructor
     public Room(String name, String desc, boolean northExit, boolean eastExit, boolean southExit,
-    boolean westExit, boolean light, List<String> enemyList, List<String> objs)
+                boolean westExit, boolean light, List<String> enemyList, List<String> objs)
     {
-        this.name = name;
-        this.desc = desc;
+        this.NAME = name;
+        this.DESC = desc;
         this.northExit = northExit;
         this.eastExit = eastExit;
         this.southExit = southExit;
@@ -52,12 +51,12 @@ public class Room
     ////////////////////////////// GETTERS //////////////////////////////
     public String getName()
     {
-        return name;
+        return NAME;
     }
 
     public String getDesc()
     {
-        return desc;
+        return DESC;
     }
 
     public boolean getNorthExit()
@@ -89,94 +88,94 @@ public class Room
     {
         return enemyList.size();
     }
-    
+
     public int getObjCount()
     {
         return objs.size();
     }
-    
-    public String getEnemy(int index) 
+
+    public String getEnemy(int index)
     {
         // returns the enemy at a specific index of enemyList
         return enemyList.get(index);
     }
-    
+
     public int getEnemyIndex(String search)
     {
         // returns the index of an enemy within enemyList
         return enemyList.indexOf(search);
     }
-    
-    public String getObj(int index) 
+
+    public String getObj(int index)
     {
         // returns the obj at a specific index of objs
         return objs.get(index);
     }
-    
+
     public int getObjIndex(String search)
     {
         // returns the index of an obj within objs
         return objs.indexOf(search);
     }
 
-    ////////////////////////////// SETTERS ////////////////////////////// 
+    ////////////////////////////// SETTERS //////////////////////////////
     public void setLight(boolean light)
     {
         this.light = light;
     }
-    
+
     public void setNorthExit(boolean state)
     {
         northExit = state;
     }
-    
+
     public void setEastExit(boolean state)
     {
         eastExit = state;
     }
-    
+
     public void setSouthExit(boolean state)
     {
         southExit = state;
     }
-    
+
     public void setWestExit(boolean state)
     {
         westExit = state;
     }
-    
+
     public void addObj(String obj)
     {
         objs.add(obj);
     }
-    
+
     public void removeEnemy(int index)
     {
         //removes an enemy at a certain index of enemyList
         enemyList.remove(index);
     }
-    
+
     public void removeObj(int index)
     {
         //removes an obj at a certain index of objs
         objs.remove(index);
     }
-    
+
     ////////////////////////////// BRAIN METHODS //////////////////////////////
-    public boolean ambushCheck(String playerClass) 
+    public boolean ambushCheck(String playerClass)
     { // calculates and returns true if the player is ambushed
         int chance = Game.generator.nextInt(11) + 1; // 1 - 10
         boolean ambush = false;
         int bonus = 0;
         // mercenaries have a decreased chance of being ambushed
-        if (playerClass.equals("mercenary")) 
+        if (playerClass.equals("mercenary"))
         {
             bonus = 2;
         }
         if (enemyList.size() > 0) // player can only get ambushed when enemies are present
         {
             // odds of getting ambushed change depending on whether the room is lit up or not
-            if (light) 
+            if (light)
             {
                 if (chance >= 5 + bonus) //50% chance (30% if mercenary)
                 {
@@ -201,7 +200,7 @@ public class Room
         }
         return ambush;
     }
-    
+
     public boolean enemyListContains(String search)
     {
         //returns true if the enemyList contains a certain enemy
@@ -212,7 +211,7 @@ public class Room
         }
         return output;
     }
-    
+
     public boolean objsContains(String search)
     {
         //returns true if the list of objs contains a certain object
@@ -223,7 +222,7 @@ public class Room
         }
         return output;
     }
-    
+
     public String randomEnemy() //Returns random enemy
     {
         String result;
@@ -231,8 +230,8 @@ public class Room
         result = enemyList.get(index);
         return result;
     }
-    
-    public boolean canMove(String direction) 
+
+    public boolean canMove(String direction)
     { // returns true if the player can move in a certain direction
         boolean output = false;
         if ((direction.equals("north") || direction.equals("n")) && northExit)
@@ -253,21 +252,21 @@ public class Room
         }
         return output;
     }
-    
+
     ////////////////////////////// TO STRING //////////////////////////////
     public String getObjs() //outputs a list of interactive objects in the room
     {
         String output = "";
-        if (!objs.isEmpty()) 
+        if (!objs.isEmpty())
         {
             output = "There is ";
-            if (objs.size() == 1) 
+            if (objs.size() == 1)
             {
                 output += "a " + objs.get(0) + ".";
-            } 
-            else 
+            }
+            else
             {
-                for (int i = 0; i < objs.size() - 1; i++) 
+                for (int i = 0; i < objs.size() - 1; i++)
                 {
                     output += objs.get(i) + ", ";
                 }
@@ -276,20 +275,20 @@ public class Room
         }
         return output;
     }
-    
+
     public String getEnemyList() // outputs the list of enemies in the room
     {
         String output = "";
-        if (!enemyList.isEmpty()) 
+        if (!enemyList.isEmpty())
         {
             output = "There is ";
-            if (enemyList.size() == 1) 
+            if (enemyList.size() == 1)
             {
                 output += "a " + enemyList.get(0) + ".";
-            } 
-            else 
+            }
+            else
             {
-                for (int i = 0; i < enemyList.size() - 1; i++) 
+                for (int i = 0; i < enemyList.size() - 1; i++)
                 {
                     output += enemyList.get(i) + ", ";
                 }
@@ -298,13 +297,13 @@ public class Room
         }
         return output;
     }
-    
+
     public String roomState()
     {
-        String output = "\n-----" + name + "-----\n";
+        String output = "\n-----" + NAME + "-----\n";
         if (light) // checks to see if the room has light
         {
-            output += desc;
+            output += DESC;
             // lists out possible exits
             output += "\nExits: ";
             if (northExit)
