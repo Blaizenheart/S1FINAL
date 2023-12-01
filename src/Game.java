@@ -9,6 +9,7 @@ public class Game
     // STATIC VARIABLES
     static boolean fighting = false;
     static String enemyAttacking = "";
+    static String currentObj = "";
     static boolean guarding = false;
     static int damage;
     static String playerName = "";
@@ -17,20 +18,45 @@ public class Game
     
     // STATUS EFFECTS
     static boolean enemyBurning = false;
+    static boolean enemyBlinded = false;
     
     // RANDOM OBJECT
     static Random generator = new Random();
     
     ////////////////////////////// ROOM OBJECTS //////////////////////////////
-    static Room entrance = new Room("Entrance", "You stand in front of a decrepit dungeon. The mist is \ntoo thick... there's no turning back now.", true, false, false, false, true, new ArrayList<String>(), new ArrayList<String>());
-    static Room courtyard = new Room("Courtyard", "You stand in the middle of a large, empty courtyard. The air hangs still...", true, false, true, true, true, List.of("feral hound"), new ArrayList<String>());
+    static Room entrance = new Room("Entrance", 
+    "You stand in front of a decrepit dungeon. The mist is \ntoo thick... there's no turning back now.", 
+    true, false, false, false, true, new ArrayList<String>(), new ArrayList<String>());
+    
+    static Room courtyard = new Room("Courtyard", 
+    "You stand in the middle of a large, empty courtyard. \nThe air hangs still...", 
+    true, false, true, true, true, List.of("feral hound", "feral hound"), List.of("blue herb"));
+    
+    static Room innerhall = new Room("Inner Hall", 
+    "The cobblestone halls of the dungeon are dimly lit \nby flickering torches. The smell of \ndeath lingers in the air.", 
+    true, false, false, false, true, List.of("prison guard", "prison guard"), new ArrayList<String>());
+    
     static Room currentRoom = new Room(); // will be used to reference different room objects later
     
     ////////////////////////////// ACTOR OBJECTS //////////////////////////////
     static Actor hound = new Actor("feral hound", 1, 5, 400, 400, 0, "claws", new ArrayList<String>(), false);
+    static Actor prisonGuardA = new Actor("prison guard", 1, 5, 400, 400, 0, "claws", new ArrayList<String>(), false);
+    
     static Actor enemy = new Actor(); // will be used to reference different actors later
 
     static Actor player = new Actor(); // creates a default actor object for the player that will be updated later
+    
+    ////////////////////////////// INTERACTABLE OBJECTS //////////////////////////////
+    static Obj houndCorpse = new Obj("feral hound corpse", 
+    "It is the corpse of a feral hound. It has nothing valuable.", false, false, false, new ArrayList<String>());
+    
+    static Obj blueHerb = new Obj("blue herb", 
+    "It is a small blue-colored plant with medicinal properties.", false, false, true, new ArrayList<String>());
+    
+    static Obj glassShards = new Obj("glass shards", 
+    "These are broken pieces of glass.", false, false, true, new ArrayList<String>());
+    
+    static Obj obj = new Obj(); // will be used to reference different actors later
     
     ////////////////////////////// MAIN METHOD //////////////////////////////
     public static void main (String[] args)
@@ -48,10 +74,14 @@ public class Game
         Scanner scan = new Scanner (System.in); // scanner object
 
         // PLAYER CLASS DESCRIPTIONS
-        String mercDesc = "Mercenaries deal in close combat, making them more vulnerable to attacks, \nbut their stealth lets them walk around unnoticed.";
-        String knightDesc = "Knights are especially resilient against enemy attacks, but their armor \nreduces their stealth.";
-        String priestDesc = "The dark priest has a strong affinity to magic, but lacks physical \nstrength.";
-        String outlanderDesc = "The outlander uses a bow to attack the enemy from afar, dealing less \ndamage but evading more attacks.";
+        String mercDesc = "Mercenaries deal in close combat, making them more vulnerable to attacks,"
+        + "\nbut their stealth lets them walk around unnoticed.";
+        String knightDesc = "Knights are especially resilient against enemy attacks,"
+        + "\nbut their clunky armor reduces their stealth.";
+        String priestDesc = "The dark priest has a strong affinity to magic,"
+        + "\nbut lacks physical \nstrength.";
+        String outlanderDesc = "The outlander uses a bow to attack the enemy from afar,"
+        + "\ndealing less damage but evading more attacks.";
 
         ////////////////////////////// PLAYER SETUP //////////////////////////////
 
@@ -129,6 +159,8 @@ public class Game
         player.setPlayerClass(playerClass); // sets the playerClass attribute of player object
         
         scan.nextLine();
+        System.out.println(); //new line
+        
         // if-statements to set player attributes based on chosen class
         if (playerClass.equals("mercenary"))
         {
@@ -138,9 +170,9 @@ public class Game
             player.setWeapon("dagger");
             player.addItem("something");
             
-            System.out.println("You were hired for a good sum of money to find a military commander that was captured" 
-            + "\nand is being held captive inside of a dungeon on the outskirts of the" 
-            + "\nneighboring country.");
+            System.out.println("You were hired for a good sum of money to find a military"
+            + "\ncommander that was captured and is being held captive inside of"
+            + "\na dungeon on the outskirts of the neighboring country.");
         }
         else if (playerClass.equals("knight"))
         {
@@ -150,9 +182,9 @@ public class Game
             player.setWeapon("sword");
             player.addItem("something");
             
-            System.out.println("During the war, your commander had been captured by enemy forces and now, you've taken"
-            + "\nit upon yourself to retrieve him from a dungeon on the outskirts of the" +
-            "\nneighboring country.");
+            System.out.println("During the war, your commander had been captured by enemy forces"
+            + "\nand now, you've taken it upon yourself to retrieve him from a"
+            + "\ndungeon on the outskirts of the neighboring country.");
         }
         else if (playerClass.equals("darkPriest"))
         {
@@ -161,9 +193,10 @@ public class Game
             player.setGold(15);
             player.addItem("something");
             player.addSpell("fireball");
-            System.out.println("You received a vision about a man who had been captured during the war who has the power to" + 
-            "\nunite the different kingdoms. You journeyed out to find this man, stumbling upon a"
-            +"\ndungeon on the outskirts of the neighboring country.");
+            System.out.println("You received a vision about a man who had been captured during"
+            + "\nthe war who has the power to unite the different kingdoms. You"
+            + "\njourneyed out to find this man, stumbling upon a dungeon on the"
+            + "\noutskirts of the neighboring country.");
         }
         else //outlander
         {
@@ -172,12 +205,15 @@ public class Game
             player.setGold(10);
             player.setWeapon("bow");
             player.addItem("something");
-            System.out.println("Your village had been invaded by a military group, and as a result, you had lost everything" + 
-            "\nyou ever cherised or cared about. You sought out the man responsible for the deaths"+
-            "\nof your loved ones, which brought you to a dungeon on the outskirts of the"+
-            "\nneighboring country.");
+            System.out.println("Your village had been invaded by a military group, and as a"
+            + "\nresult, you had lost everything you ever cherised or cared"
+            + "\nabout. You sought out the man responsible for the deaths of"
+            + "\nyour loved ones, which brought you to a dungeon on the" 
+            + "\noutskirts of the neighboring country.");
         }
-        System.out.println("As you near the dungeon, the mist begins to get thicker...\n");
+        System.out.println("\nAs you near the dungeon, the mist begins to get thicker...\n");
+        
+        scan.nextLine();
         currentRoom = entrance;
         
         ////////////////////////////// THE GAME //////////////////////////////
@@ -208,6 +244,7 @@ public class Game
                 boolean playerTurn = false;
                 turn = 0; //Will keep track of the amount of turns
                 guarding = false;
+                boolean running = false;
                 
                 copyEnemyObjects();
                 
@@ -216,7 +253,8 @@ public class Game
                 if (firstBattle) // the player gets a small tutorial on their first battle
                 {
                     System.out.println("It seems like you've entered your first battle!\n");
-                    System.out.println("Every turn, you get the option to [ATTACK], use [SPELLS], \n[GUARD], use an [ITEM], or [FLEE] if you're a coward.\n");
+                    System.out.println("Every turn, you get the option to [ATTACK], use [SPELLS],"
+                    + "\n[GUARD], use an [ITEM], or [FLEE] if you're a coward.\n");
                     System.out.println("Watch your HP! When it becomes 0, it's GAME OVER.\n");
                     
                     System.out.println("\n...\n");
@@ -247,8 +285,6 @@ public class Game
                         System.out.println("\n" + player.getName().toUpperCase() + " HP: " + player.hpVisual());
                         System.out.println("\n" + enemy.getName().toUpperCase() + " HP: " + enemy.hpVisual());
                         
-                        scan.nextLine();
-                        
                         // if the player or enemy is dead the fighting ends
                         if (player.isDead())
                         {
@@ -260,8 +296,8 @@ public class Game
                         }
                         firstTurn = true;
                     }
-                    
-                    if (fighting) // if the player dies from an enemy's turn above then this code is skipped over
+                    // if the player dies from an enemy's turn above then this code is skipped over
+                    if (fighting) 
                     {
                         playerTurn = true;
                         System.out.println("\n///////////////YOUR TURN///////////////\n");
@@ -352,6 +388,7 @@ public class Game
                                 {
                                     System.out.println("\nYou ran away!");
                                     fighting = false;
+                                    running = true;
                                 }
                                 else
                                 {
@@ -378,8 +415,6 @@ public class Game
                     
                     if (fighting) // skips enemy turn if the fight has ended
                     {
-                        System.out.println("\n...\n");
-                        scan.nextLine();
                         
                         // enemy turn
                         enemyTurn();
@@ -396,20 +431,29 @@ public class Game
                     }
                 }
                 // post battle code
-                if (player.getDeathState() == true) // player is dead
+                if (!running)
                 {
-                    System.out.println("\nYou succumb to your wounds."); // womp womp
-                    System.out.println("\n////////////////////////////// GAME OVER //////////////////////////////");
+                   if (player.getDeathState() == true) // player is dead
+                    {
+                        System.out.println("\nYou succumb to your wounds."); // womp womp
+                        System.out.println("\n////////////////////////////// GAME OVER //////////////////////////////");
+                    }
+                    else if (enemy.getDeathState() == true)
+                    {
+                        System.out.println("\nYou are victorious!");
+                        currentRoom.removeEnemy(currentRoom.getEnemyIndex(enemyAttacking)); // removes the dead enemy from the room's enemylist
+                        intentionalFight = false; // resets for the next fight
+                        // resets status effects
+                        enemyBurning = false;
+                        enemyBlinded = false;
+                        
+                        addEnemyCorpse(); // adds the enemy's corpse to the room as an object
+                        enemyAttacking = "";
+                        System.out.println("\n...\n");
+                        scan.nextLine();
+                    } 
                 }
-                else if (enemy.getDeathState() == true)
-                {
-                    System.out.println("\nYou are victorious!");
-                    currentRoom.removeEnemy(currentRoom.getEnemyIndex(enemyAttacking)); // removes the dead enemy from the room's enemylist
-                    intentionalFight = false; // resets for the next fight
-                    
-                    System.out.println("\n...\n");
-                    scan.nextLine();
-                }
+                
             }
             else
             {
@@ -429,10 +473,12 @@ public class Game
                     System.out.println("\nprofile = opens your profile");
                     System.out.println("\nspells = displays the spells you've learned");
                     System.out.println("\nmove = lets you move to different areas");
-                    System.out.println("\nlook = you look at your surroundings");
+                    System.out.println("\nlook = describes the area around you");
+                    System.out.println("\nuse = lets you use an item from your inventory");
                     System.out.println("\nquit = quits the game :(");
                 }
                 
+                //movement
                 if (input.equals("move"))
                 {
                     allowedMove = false;
@@ -485,7 +531,8 @@ public class Game
                         Game.moveTo("west");
                     }
                 }
-
+                
+                //displays information
                 if (input.equals("inventory"))
                 {
                     System.out.println(player.openInventory());
@@ -501,9 +548,15 @@ public class Game
                     System.out.println(player.openSpells());
                 }
                 
+                //player interaction with environment
                 if (input.equals("look") || input.equals("look around"))
                 {
                     System.out.println(currentRoom.roomState());
+                }
+                
+                if (input.equals("use"))
+                {
+                    System.out.println("What do you want to use?");
                 }
                 
                 if (input.equals("fight") || input.equals("attack"))
@@ -645,6 +698,14 @@ public class Game
         if (enemyAttacking.equals("feral hound"))
         {
             enemy = hound;
+        }
+    }
+    
+    public static void addEnemyCorpse() // after defeating an enemy, adds a corpse to the objects of the room
+    {
+        if (enemyAttacking.equals("feral hound"))
+        {
+            currentRoom.addObj("feral hound corpse");
         }
     }
 } // end main class
