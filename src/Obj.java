@@ -4,62 +4,66 @@ import java.util.ArrayList;
 public class Obj
 {
     ////////////////////////////// INSTANCE VARIABLES //////////////////////////////
-    private String name;
+    private final String NAME;
     private String desc; // description to print for the player upon using the "examine (object)" command
     private boolean locked; // is it locked?
     private boolean lootable;
     private boolean obtainable; // can you take it?
-    private List<String> itemsList; // items that could be inside of the object
-    
+    private List<String> itemsList; // items that could be inside the object
+
     ////////////////////////////// CONSTRUCTORS //////////////////////////////
     // Default Constructor
     public Obj()
     {
-        name = "";
+        NAME = "";
         desc = "";
         locked = false;
         lootable = false;
         obtainable = false;
         itemsList = new ArrayList<>();
     }
-    
+
     // Full Constructor
     public Obj(String name, String desc, boolean locked, boolean lootable, boolean obtainable, List<String> itemsList)
     {
-        this.name = name;
+        this.NAME = name;
         this.desc = desc;
         this.locked = locked;
         this.lootable = lootable;
         this.obtainable = obtainable;
         this.itemsList = new ArrayList<>(itemsList);
     }
-    
+
     ////////////////////////////// GETTERS //////////////////////////////
     public String getName()
     {
-        return name;
+        return NAME;
     }
-    
+
     public String getDesc()
     {
         return desc;
     }
-    
+
     public boolean isLocked()
     {
         return locked;
     }
-    
+
     public boolean isLootable()
     {
+        if (itemsList.size() == 0)
+        {
+            lootable = false;
+        }
         return lootable;
     }
-    
+
     public boolean isObtainable()
     {
         return obtainable;
     }
-    
+
     public boolean containsItems()
     {
         boolean output = false;
@@ -69,39 +73,47 @@ public class Obj
         }
         return output;
     }
-    
+
     ////////////////////////////// SETTERS ////////////////////////////// 
     public void setLock()
     {
         locked = false;
     }
-    
-    public void setLoot()
+
+    public void setLoot(boolean bool)
     {
-        lootable = false;
+        lootable = bool;
     }
-    
+
     public void removeItem(int index)
     {
         itemsList.remove(index);
     }
-    
+
     ////////////////////////////// BRAIN METHODS //////////////////////////////
     
+    public void transferItems(Actor actor) // transfer items into the player's inventory
+    {
+        for (int i = 0; i < itemsList.size(); i++)
+        {
+            actor.addItem(itemsList.get(i));
+        }
+    }
+    
     ////////////////////////////// TO STRING //////////////////////////////
-    public String getItems() //meant to output the items inside the interactive obj (usually some kind of container)
+    public String getItems() // meant to output the items inside the interactive obj (usually some kind of container)
     {
         String output = "";
-        if (!itemsList.isEmpty()) 
+        if (!itemsList.isEmpty())
         {
-            output = "Inside the " + name + " is ";
-            if (itemsList.size() == 1) 
+            output = "Inside the " + NAME + " is ";
+            if (itemsList.size() == 1)
             {
                 output += "a " + itemsList.get(0) + ".";
-            } 
-            else 
+            }
+            else
             {
-                for (int i = 0; i < itemsList.size() - 1; i++) 
+                for (int i = 0; i < itemsList.size() - 1; i++)
                 {
                     output += itemsList.get(i) + ", ";
                 }
