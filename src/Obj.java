@@ -100,6 +100,37 @@ public class Obj
         }
     }
     
+    public void randomLoot(Actor actor) // player gets a random item
+    {
+        int rand;
+        if (name.equals("barrel"))
+        {
+            rand = Game.generator.nextInt(5) + 1;  // 1-5
+            if (rand == 1)
+            {
+                actor.addItem("blue vial");
+            }
+            else if (rand == 2)
+            {
+                actor.addItem("blue herb");
+            }
+            else if (random == 3)
+            {
+                actor.addItem("glass shards");
+            }
+            else if (random == 4)
+            {
+                actor.addItem("");
+            }
+            else
+            {
+                
+            }
+            
+            
+        }
+    }
+    
     ////////////////////////////// TO STRING //////////////////////////////
     public String getItems() // meant to output the items inside the interactive obj (usually some kind of container)
     {
