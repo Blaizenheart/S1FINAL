@@ -8,7 +8,7 @@
         // STATIC VARIABLES
         static boolean fighting = false;
         static String enemyAttacking = "";
-        static boolean intentional fight = false;
+        static boolean intentionalFight = false;
         static boolean guarding = false;
         static boolean playerTurn = false;
         static int damage;
@@ -1062,21 +1062,21 @@
                     System.out.println(guardCorpse.getDesc());
                 }
             }
-            else if (nput.equals("blue herb"))
+            else if (input.equals("blue herb"))
             {
                 if (currentRoom.objsContains(input) || player.hasItem("blue herb"))
                 {
                     System.out.println(blueHerb.getDesc());
                 }
             }
-            else if (nput.equals("blue vial"))
+            else if (input.equals("blue vial"))
             {
                 if (currentRoom.objsContains(input) || player.hasItem("blue vial"))
                 {
                     System.out.println(blueVial.getDesc());
                 }
             }
-            else if (nput.equals("glass shards"))
+            else if (input.equals("glass shards"))
             {
                 if (currentRoom.objsContains(input) || player.hasItem("glass shards"))
                 {
@@ -1103,7 +1103,7 @@
                     if (barrel.isLootable())
                     {
                         barrel.getItems();
-                        barrel.randomLoot(player);
+                        barrel.randomLoot(player, barrel);
                         barrel.setLoot(false); //can no longer loot it
                         System.out.println("You looted the barrel!");
                     }
