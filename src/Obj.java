@@ -52,10 +52,6 @@ public class Obj
 
     public boolean isLootable()
     {
-        if (itemsList.size() == 0)
-        {
-            lootable = false;
-        }
         return lootable;
     }
 
