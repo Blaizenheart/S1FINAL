@@ -100,12 +100,12 @@ public class Obj
         }
     }
     
-    public void randomLoot(Actor actor) // player gets a random item
+    public void randomLoot(Actor actor, Obj obj) // player gets a random item
     {
         int rand;
-        if (name.equals("barrel"))
+        if (obj.getName().equals("barrel"))
         {
-            rand = Game.generator.nextInt(5) + 1;  // 1-5
+            rand = Game.generator.nextInt(3) + 1;  // 1-3
             if (rand == 1)
             {
                 actor.addItem("blue vial");
@@ -114,20 +114,10 @@ public class Obj
             {
                 actor.addItem("blue herb");
             }
-            else if (random == 3)
+            else if (rand == 3)
             {
                 actor.addItem("glass shards");
             }
-            else if (random == 4)
-            {
-                actor.addItem("");
-            }
-            else
-            {
-                
-            }
-            
-            
         }
     }
     
