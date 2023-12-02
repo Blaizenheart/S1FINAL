@@ -124,6 +124,11 @@ public class Actor
     {
         return gold;
     }
+    
+    public List getInventory()
+    {
+        return inventory;
+    }
 
     public boolean getDeathState()
     {
@@ -246,7 +251,18 @@ public class Actor
     }
 
     ////////////////////////////// BRAIN METHODS //////////////////////////////
-
+    public void copyActor(Actor actor) // copies the attributes of another actor
+    {
+        this.name = actor.getName();
+        this.level = actor.getLevel();
+        this.atk = actor.getAtk();
+        this.hp = actor.getHp();
+        this.maxHp = actor.getMaxHp();
+        this.def = actor.getDef();
+        this.weapon = actor.getWeapon();
+        this.inventory = actor.getInventory();
+    }
+    
     public boolean isDead() // checks to see if the actor is dead
     {
         boolean result = false;
@@ -338,12 +354,23 @@ public class Actor
         }
         return result;
     }
-
-    public boolean enemyMissChance(String playerClass) // calculates if the enemy misses an attack
+    
+    public boolean blindedChance() //calculates if the actor misses an attack
     {
         boolean result = false;
         int chance = Game.generator.nextInt(11)+1;
-        if (playerClass == "outlander") // enemies are more likely to miss attacks against outlanders
+        if (chance == 5) // 10% chance to get blinded
+        {
+            result = true;
+        }
+        return result;
+    }
+
+    public boolean enemyMissChance(String playerClass, boolean enemyBlinded) // calculates if the enemy misses an attack
+    {
+        boolean result = false;
+        int chance = Game.generator.nextInt(11)+1;
+        if (playerClass == "outlander" || enemyBlinded == true) // enemies are more likely to miss attacks against outlanders
         {
             if (chance >= 5)
             {
