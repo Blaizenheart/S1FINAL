@@ -8,7 +8,8 @@
         // STATIC VARIABLES
         static boolean fighting = false;
         static String enemyAttacking = "";
-        static boolean intentionalFight = false;
+        static boolean intentional
+        ght = false;
         static boolean guarding = false;
         static boolean playerTurn = false;
         static int damage;
@@ -38,7 +39,7 @@
 
         static Room innerHall = new Room("Inner Hall",
                 "The cobblestone halls of the dungeon are dimly lit \nby flickering torches. The smell of \ndeath lingers in the air.",
-                true, false, false, true, true, List.of("prison guard", "ballistic guard"), new ArrayList<>());
+                true, false, false, true, true, List.of("prison guard"), new ArrayList<>());
                 
         static Room basement = new Room("Basement",
                 "The walls are crumbling at the edges. The air has a \nsort of sickly stench to it.",
@@ -103,15 +104,21 @@
 
         static Obj houndCorpse2 = new Obj("rabid hound corpse",
                 "It is the corpse of a rabid hound. It has nothing valuable.", false, false, false, new ArrayList<>());
+        
+        static Obj guardCorpse = new Obj("prison guard corpse",
+                "It is the corpse of a mutated prison guard. Odd tumor-like \nclumps of flesh have formed all over its body. Perhaps it was human once.", false, true, false, List.of("blue vial"));
 
         static Obj blueHerb = new Obj("blue herb",
                 "It is a small blue-colored plant with medicinal properties.", false, false, true, new ArrayList<>());
-
+                
+        static Obj blueVial = new Obj("blue vial",
+                "It is a small glass vial of blue liquid that has strong medicinal properties.", false, false, true, new ArrayList<>());
+                
         static Obj glassShards = new Obj("glass shards",
                 "These are broken pieces of glass.", false, false, true, new ArrayList<>());
                 
         static Obj barrel = new Obj("barrel",
-                "A wooden barrel.", false, true, false, List.of("blue herb", "glass shards"));
+                "A wooden barrel.", false, true, false, new ArrayList<>());
 
         ////////////////////////////// MAIN METHOD //////////////////////////////
         public static void main (String[] args)
@@ -795,7 +802,11 @@
             }
             else if (enemyAttacking.equals("rabid hound"))
             {
-                enemy = hound2;
+                enemy.copyActor(hound2);
+            }
+            else if (enemyAttacking.equals("prison guard"))
+            {
+                enemy.copyActor(prisonGuardA);
             }
         }
 
@@ -808,6 +819,10 @@
             else if (enemyAttacking.equals("rabid hound"))
             {
                 currentRoom.addObj("rabid hound corpse");
+            }
+            else if (enemyAttacking.equals("prison guard"))
+            {
+                currentRoom.addObj("prison guard corpse");
             }
         }
 
@@ -902,6 +917,19 @@
                         System.out.println("You don't have glass shards to use!");
                     }
                 }
+                else if (input.equals("blue vial"))
+                {
+                    if (player.hasItem(input))
+                    {
+                        System.out.println("You use the " + input + ".");
+                        player.subItem(player.inventoryIndex("blue vial"));
+                        player.addHp(80); // blue vial adds 80 hp
+                    }
+                    else
+                    {
+                        System.out.println("You don't have a blue herb to use!");
+                    }
+                }
                 else
                 {
                     System.out.println("\nInvalid item.");
@@ -926,6 +954,32 @@
                     {
                         System.out.println("You take the " + input + ".");
                         player.addItem("blue herb");
+                        currentRoom.removeObj(currentRoom.getObjIndex(input));
+                    }
+                    else
+                    {
+                        System.out.println("\nThat's not in here.");
+                    }
+                }
+                else if (input.equals("blue vial"))
+                {
+                    if (currentRoom.objsContains(input))
+                    {
+                        System.out.println("You take the " + input + ".");
+                        player.addItem("blue vial");
+                        currentRoom.removeObj(currentRoom.getObjIndex(input));
+                    }
+                    else
+                    {
+                        System.out.println("\nThat's not in here.");
+                    }
+                }
+                else if (input.equals("glass shards"))
+                {
+                    if (currentRoom.objsContains(input))
+                    {
+                        System.out.println("You take the " + input + ".");
+                        player.addItem("glass shards");
                         currentRoom.removeObj(currentRoom.getObjIndex(input));
                     }
                     else
@@ -1002,6 +1056,34 @@
                     System.out.println(houndCorpse2.getDesc());
                 }
             }
+            else if (input.equals("prison guard corpse") || input.equals("prison guard") || input.equals("guard corpse"))
+            {
+                if (currentRoom.objsContains(input))
+                {
+                    System.out.println(guardCorpse.getDesc());
+                }
+            }
+            else if (nput.equals("blue herb"))
+            {
+                if (currentRoom.objsContains(input) || player.hasItem("blue herb"))
+                {
+                    System.out.println(blueHerb.getDesc());
+                }
+            }
+            else if (nput.equals("blue vial"))
+            {
+                if (currentRoom.objsContains(input) || player.hasItem("blue vial"))
+                {
+                    System.out.println(blueVial.getDesc());
+                }
+            }
+            else if (nput.equals("glass shards"))
+            {
+                if (currentRoom.objsContains(input) || player.hasItem("glass shards"))
+                {
+                    System.out.println(glassShards.getDesc());
+                }
+            }
             else
             {
                 System.out.println("\nInvalid input.");
@@ -1022,7 +1104,7 @@
                     if (barrel.isLootable())
                     {
                         barrel.getItems();
-                        barrel.transferItems(player);
+                        barrel.randomLoot(player);
                         barrel.setLoot(false); //can no longer loot it
                         System.out.println("You looted the barrel!");
                     }
