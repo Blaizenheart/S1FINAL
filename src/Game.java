@@ -8,8 +8,7 @@
         // STATIC VARIABLES
         static boolean fighting = false;
         static String enemyAttacking = "";
-        static boolean intentional
-        ght = false;
+        static boolean intentional fight = false;
         static boolean guarding = false;
         static boolean playerTurn = false;
         static int damage;
@@ -927,7 +926,7 @@
                     }
                     else
                     {
-                        System.out.println("You don't have a blue herb to use!");
+                        System.out.println("You don't have a blue vial to use!");
                     }
                 }
                 else
