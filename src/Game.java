@@ -34,11 +34,53 @@
 
         static Room courtyard = new Room("Courtyard",
                 "You stand in the middle of a large, empty courtyard. \nThe air hangs still...",
-                true, false, true, true, true, List.of("feral hound", "rabid hound"), List.of("blue herb", "barrel"));
+                false, true, true, true, true, List.of("feral hound", "rabid hound"), List.of("blue herb", "barrel"));
 
         static Room innerHall = new Room("Inner Hall",
                 "The cobblestone halls of the dungeon are dimly lit \nby flickering torches. The smell of \ndeath lingers in the air.",
-                true, false, false, false, true, List.of("prison guard", "tall prison guard"), new ArrayList<>());
+                true, false, false, true, true, List.of("prison guard", "ballistic guard"), new ArrayList<>());
+                
+        static Room basement = new Room("Basement",
+                "The walls are crumbling at the edges. The air has a \nsort of sickly stench to it.",
+                true, true, false, false, true, new ArrayList<>(), new ArrayList<>()); 
+                
+        static Room prisonA = new Room("Prison",
+                "Rows of cells seem to extend further into the next room.\nThis seems to be the place prisoners are kept.",
+                true, false, true, true, true, List.of("prisoner ghoul", "animated skeleton"), new ArrayList<>());
+                
+        static Room prisonB = new Room("Deep Prison",
+                "There is water dripping off of the ceiling, pooling on top \nof the uneven cobblestone ground. This seems to be the \nsecond half of the prisons.",
+                false, false, true, false, false, List.of("prisoner ghoul", "elite prison guard"), new ArrayList<>());
+                
+        static Room westWing = new Room("West Wing",
+                "The air feels less oppressive here. This seems like it used\nto be an armory of some sort. Dirty wooden tables and odd steel \ncontraptions are scattered around the room.",
+                false, true, false, false, true, new ArrayList<>(), new ArrayList<>()); // north exit to hidden chamber unlocked later
+                
+        static Room hiddenChamber = new Room("Hidden Chamber",
+                "This is a small, oddly normal room. There are a few dusty \nbookshelves lined against the wall.",
+                false, false, true, false, true, new ArrayList<>(), new ArrayList<>());
+                
+        static Room cavern = new Room("Cavern",
+                "This is a relatively big area. The ground is broken into \ndifferent chunks that are raised some distance from the actual \n"
+                + "floor of the cavern. The drop from here would be fatal. There \nare several bridges that connect the land masses.",
+                false, true, false, false, false, List.of("cave-being", "cave gnome"), new ArrayList<>()); // west exit unlocked later w/ key
+                
+        static Room mines = new Room("Mines",
+                "The area is composed of diverging and converging tunnel \nstructures. This place was likely created with the intention of \nbeing used for mineral extraction. \nWhat came first, the dungeon or the mines?",
+                false, true, false, false, true, List.of("zombie miner", "rocky amalgamation"), new ArrayList<>());
+        
+        static Room eastWing = new Room("East Wing",
+                "A large room lined with broken suits of armor. The ceiling \nseems to be held up by wooden beams of questionable integrity.",
+                true, false, false, true, true, new ArrayList<>(), new ArrayList<>());
+                
+        static Room catacombs = new Room("Catacombs",
+                "Stacks of skulls yellowed from time fill the walls, and random \nbones are scattered across the floor. The catacombs are faintly"
+                + "\nlit by lanterns. The air smells stale.",
+                false, false, true, false, true, new ArrayList<>(), new ArrayList<>()); // north exit unlocked later w/ key
+                
+        static Room catacombCell = new Room("Catacomb Cell",
+                "A single cell sits at the end of the catacombs. The bars are thick.",
+                false, false, true, false, true, new ArrayList<>(), new ArrayList<>());        
 
         static Room currentRoom = new Room(); // will be used to reference different room objects later
 
@@ -589,6 +631,86 @@
             {
                 currentRoom = courtyard;
             }
+            else if (currentRoom.getName().equals("Inner Hall") && (direction.equals("north") || direction.equals("n")))
+            {
+                currentRoom = cavern;
+            }
+            else if (currentRoom.getName().equals("Cavern") && (direction.equals("south") || direction.equals("s")))
+            {
+                currentRoom = innerHall;
+            }
+            else if (currentRoom.getName().equals("Cavern") && (direction.equals("west") || direction.equals("w")))
+            {
+                currentRoom = mines;
+            }
+            else if (currentRoom.getName().equals("Mines") && (direction.equals("east") || direction.equals("e")))
+            {
+                currentRoom = cavern;
+            }
+            else if (currentRoom.getName().equals("Cavern") && (direction.equals("east") || direction.equals("e")))
+            {
+                currentRoom = eastWing;
+            }
+            else if (currentRoom.getName().equals("East Wing") && (direction.equals("west") || direction.equals("w")))
+            {
+                currentRoom = cavern;
+            }
+            else if (currentRoom.getName().equals("East Wing") && (direction.equals("north") || direction.equals("n")))
+            {
+                currentRoom = catacombs;
+            }
+            else if (currentRoom.getName().equals("Catacombs") && (direction.equals("south") || direction.equals("s")))
+            {
+                currentRoom = eastWing;
+            }
+            else if (currentRoom.getName().equals("Catacombs") && (direction.equals("north") || direction.equals("north")))
+            {
+                currentRoom = catacombCell;
+            }
+            else if (currentRoom.getName().equals("Catacomb Cell") && (direction.equals("south") || direction.equals("s")))
+            {
+                currentRoom = catacombs;
+            }
+            else if (currentRoom.getName().equals("Courtyard") && (direction.equals("west") || direction.equals("w")))
+            {
+                currentRoom = basement;
+            }
+            else if (currentRoom.getName().equals("Basement") && (direction.equals("east") || direction.equals("e")))
+            {
+                currentRoom = courtyard;
+            }
+            else if (currentRoom.getName().equals("Basement") && (direction.equals("north") || direction.equals("n")))
+            {
+                currentRoom = prisonA;
+            }
+            else if (currentRoom.getName().equals("Prison") && (direction.equals("south") || direction.equals("s")))
+            {
+                currentRoom = basement;
+            }
+            else if (currentRoom.getName().equals("Prison") && (direction.equals("west") || direction.equals("w")))
+            {
+                currentRoom = westWing;
+            }
+            else if (currentRoom.getName().equals("Prison") && (direction.equals("north") || direction.equals("n")))
+            {
+                currentRoom = prisonB;
+            }
+            else if (currentRoom.getName().equals("Deep Prison") && (direction.equals("south") || direction.equals("s")))
+            {
+                currentRoom = prisonA;
+            }
+            else if (currentRoom.getName().equals("West Wing") && (direction.equals("east") || direction.equals("e")))
+            {
+                currentRoom = prisonA;
+            }
+            else if (currentRoom.getName().equals("West Wing") && (direction.equals("north") || direction.equals("n")))
+            {
+                currentRoom = hiddenChamber;
+            }
+            else if (currentRoom.getName().equals("Hidden Chamber") && (direction.equals("south") || direction.equals("s")))
+            {
+                currentRoom = westWing;
+            }
         }
 
         private static void enemyTurn()
@@ -614,7 +736,7 @@
                 System.out.println("It lunges at you!");
             }
 
-            if (enemy.enemyMissChance(playerClass)) // sees if the enemy misses its attack
+            if (enemy.enemyMissChance(playerClass, enemyBlinded)) // sees if the enemy misses its attack
             {
                 System.out.println("\nYou dodge the attack!");
             }
@@ -665,11 +787,11 @@
             return output;
         }
 
-        private static void copyEnemyObjects() // assigning references to the enemy variable
+        private static void copyEnemyObjects() // copying the attributes of the correspoding actor object
         {
             if (enemyAttacking.equals("feral hound"))
             {
-                enemy = hound;
+                enemy.copyActor(hound);
             }
             else if (enemyAttacking.equals("rabid hound"))
             {
@@ -757,6 +879,27 @@
                     else
                     {
                         System.out.println("You don't have a blue herb to use!");
+                    }
+                }
+                else if (input.equals("glass shards") || input.equals("glass") || input.equals("glass shard"))
+                {
+                    if (player.hasItem(input))
+                    {
+                        System.out.println("You throw the glass shards at the " + enemyAttacking + "!");
+                        player.subItem(player.inventoryIndex("glass shards"));
+                        if (enemy.blindedChance())
+                        {
+                            enemyBlinded = true;
+                            System.out.println("The enemy is blinded!");
+                        }
+                        else
+                        {
+                            System.out.println("The glass shards miss!");
+                        }
+                    }
+                    else
+                    {
+                        System.out.println("You don't have glass shards to use!");
                     }
                 }
                 else
