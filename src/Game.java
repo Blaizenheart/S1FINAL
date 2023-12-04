@@ -54,7 +54,7 @@
                 
         static Room westWing = new Room("West Wing",
                 "The air feels less oppressive here. This seems like it used\nto be an armory of some sort. Dirty wooden tables and odd steel \ncontraptions are scattered around the room.",
-                false, true, false, false, true, new ArrayList<>(), new ArrayList<>()); // north exit to hidden chamber unlocked later
+                false, true, false, false, true, new ArrayList<>(), List.of("matches", "locked metal door")); // north exit to hidden chamber unlocked later
                 
         static Room hiddenChamber = new Room("Hidden Chamber",
                 "This is a small, oddly normal room. There are a few dusty \nbookshelves lined against the wall.",
@@ -63,11 +63,11 @@
         static Room cavern = new Room("Cavern",
                 "This is a relatively big area. The ground is broken into \ndifferent chunks that are raised some distance from the actual \n"
                 + "floor of the cavern. The drop from here would be fatal. There \nare several bridges that connect the land masses.",
-                false, true, false, false, false, List.of("cave-being", "cave gnome"), new ArrayList<>()); // west exit unlocked later w/ key
+                false, true, false, false, false, List.of("cave-being", "cave gnome"), List.of("locked metal gate")); // west exit unlocked later w/ key
                 
         static Room mines = new Room("Mines",
                 "The area is composed of diverging and converging tunnel \nstructures. This place was likely created with the intention of \nbeing used for mineral extraction. \nWhat came first, the dungeon or the mines?",
-                false, true, false, false, true, List.of("zombie miner", "rocky amalgamation"), new ArrayList<>());
+                false, true, false, false, true, List.of("zombie miner", "rocky amalgamation"), List.of("minecart"));
         
         static Room eastWing = new Room("East Wing",
                 "A large room lined with broken suits of armor. The ceiling \nseems to be held up by wooden beams of questionable integrity.",
@@ -92,11 +92,15 @@
         static Actor prisonGuardA = new Actor("prison guard", 1, 5, 800, 800, 0, "cleaver", new ArrayList<>(), false);
 
         static Actor prisonGuardB = new Actor("ballistic guard", 1, 5, 500, 500, 0, "ballista", new ArrayList<>(), false);
-
+        
+        static Actor ghoul = new Actor("prisoner ghoul", 1, 1, 100, 100, 0, "", new ArrayList<>(), false);
+        
+        static Actor sheleton = new Actor("animated skeleton", 1, 1, 200, 200, 0, "", new ArrayList<>(), false);
+        
         static Actor enemy = new Actor(); // will be used to reference different actors later
 
-        static Actor player = new Actor(); // creates a default actor object for the player that will be updated later
-
+        static Actor player = new Actor(); // creates a default actor object for the player that will be updated lat
+        
         ////////////////////////////// INTERACTABLE OBJECTS //////////////////////////////
         static Obj houndCorpse = new Obj("feral hound corpse",
                 "It is the corpse of a feral hound. It has nothing valuable.", false, false, false, new ArrayList<>());
@@ -106,7 +110,13 @@
         
         static Obj guardCorpse = new Obj("prison guard corpse",
                 "It is the corpse of a mutated prison guard. Odd tumor-like \nclumps of flesh have formed all over its body. Perhaps it was human once.", false, true, false, List.of("blue vial"));
-
+                
+        static Obj ghoulCorpse = new Obj("ghoul corpse",
+                "It is the corpse of a ghoul. It is wearing a tattered prisoner's\n attire. The veins across its body are bloodshot red, and its hands seem burnt.", false, false, false, new ArrayList<>());        
+        
+        static Obj skeletonCorpse = new Obj("skeleton corpse",
+                "It is a skeleton. It's bones have become disconnected from one another.", false, false, false, new ArrayList<>()); 
+                
         static Obj blueHerb = new Obj("blue herb",
                 "It is a small blue-colored plant with medicinal properties.", false, false, true, new ArrayList<>());
                 
@@ -115,7 +125,19 @@
                 
         static Obj glassShards = new Obj("glass shards",
                 "These are broken pieces of glass.", false, false, true, new ArrayList<>());
+        
+        static Obj matches = new Obj("matches",
+                "You could probably use these to light up dark spaces.", false, false, true, new ArrayList<>());
                 
+        static Obj lockedMetalDoor = new Obj("locked metal door",
+                "The metal door is rusting at the edges. There is a small keyhole.", true, false, false, new ArrayList<>());
+        
+        static Obj rustyKey = new Obj("rusty key",
+                "The metal key is rusting at the edges.", false, false, true, new ArrayList<>());
+        
+        static Obj minecart = new Obj("minecart",
+                "The minecart is filled with rocks.", false, true, false, List.of("rusty key"));
+        
         static Obj barrel = new Obj("barrel",
                 "A wooden barrel.", false, true, false, new ArrayList<>());
 
@@ -216,8 +238,6 @@
 
             player.setPlayerClass(playerClass); // sets the playerClass attribute of player object
 
-            System.out.println("Press ENTER to continue.");
-            scan.nextLine();
             System.out.println(); //new line
 
             // if-statements to set player attributes based on chosen class
@@ -739,7 +759,27 @@
             else if (enemy.getName().equals("rabid hound"))
             {
                 System.out.println("\nThe rabid hound snarls at you...");
-                System.out.println("It lunges at you!");
+                System.out.println("It pounces at you!");
+            }
+            else if (enemy.getName().equals("prison guard"))
+            {
+                System.out.println("\nThe prison guard raises its cleaver...");
+                System.out.println("It swings at you!");
+            }
+            else if (enemy.getName().equals("ballistic guard"))
+            {
+                System.out.println("\nThe prison guard readies its ballista...");
+                System.out.println("It shoots at you!");
+            }
+            else if (enemy.getName().equals("prisoner ghoul"))
+            {
+                System.out.println("\nThe ghoul groans...");
+                System.out.println("It tries to scratch you!");
+            }
+            else if (enemy.getName().equals("animated skeleton"))
+            {
+                System.out.println("\nThe skeleton unhinges its jaw, but no noise comes out...");
+                System.out.println("It tries to grab you!");
             }
 
             if (enemy.enemyMissChance(playerClass, enemyBlinded)) // sees if the enemy misses its attack
@@ -807,6 +847,18 @@
             {
                 enemy.copyActor(prisonGuardA);
             }
+            else if (enemyAttacking.equals("ballistic guard"))
+            {
+                enemy.copyActor(prisonGuardB);
+            }
+            else if (enemyAttacking.equals("prisoner ghoul"))
+            {
+                enemy.copyActor(ghoul);
+            }
+            else if (enemyAttacking.equals("animated skeleton"))
+            {
+                enemy.copyActor(skeleton);
+            }
         }
 
         private static void addEnemyCorpse() // after defeating an enemy, adds a corpse to the objects of the room
@@ -822,6 +874,18 @@
             else if (enemyAttacking.equals("prison guard"))
             {
                 currentRoom.addObj("prison guard corpse");
+            }
+            else if (enemyAttacking.equals("ballistic guard"))
+            {
+                currentRoom.addObj("ballistic guard corpse");
+            }
+            else if (enemyAttacking.equals("prisoner ghoul"))
+            {
+                currentRoom.addObj("ghoul corpse");
+            }
+            else if (enemyAttacking.equals("animated skeleton"))
+            {
+                currentRoom.addObj("sheleton corpse");
             }
         }
 
@@ -929,6 +993,39 @@
                         System.out.println("You don't have a blue vial to use!");
                     }
                 }
+                else if (input.equals("matches"))
+                {
+                    if (player.hasItem(input))
+                    {
+                        System.out.println("You use the " + input + ".");
+                        player.subItem(player.inventoryIndex("matches"));
+                        System.out.println("You carry the lit match with your non dominant hand.");
+                        if (!currentRoom.getLight()) //if player is in a room without light it updates the room desc
+                        {
+                            System.out.println("\nYou can see now!");
+                            if (currentRoom.getName().equals("Cavern"))
+                            {
+                                cavern.setLight(true);
+                            }
+                            else
+                            {
+                                prisonB.setLight(true);
+                            }
+                            System.out.println(currentRoom.roomState()); //prints the room desc againeere
+                        }
+                        else
+                        {
+                            cavern.setLight(true);
+                            prisonB.setLight(true);
+                        }
+                        
+                        
+                    }
+                    else
+                    {
+                        System.out.println("You don't have any matches to use!");
+                    }
+                }
                 else
                 {
                     System.out.println("\nInvalid item.");
@@ -979,6 +1076,19 @@
                     {
                         System.out.println("You take the " + input + ".");
                         player.addItem("glass shards");
+                        currentRoom.removeObj(currentRoom.getObjIndex(input));
+                    }
+                    else
+                    {
+                        System.out.println("\nThat's not in here.");
+                    }
+                }
+                else if (input.equals("matches"))
+                {
+                    if (currentRoom.objsContains(input))
+                    {
+                        System.out.println("You take the " + input + ".");
+                        player.addItem("matches");
                         currentRoom.removeObj(currentRoom.getObjIndex(input));
                     }
                     else
@@ -1041,25 +1151,46 @@
             input = scan.nextLine();
             input = input.toLowerCase();
             System.out.println("\n> " + input);
-            if (input.equals("feral hound corpse") || input.equals("feral hound"))
+            if (input.equals("feral hound corpse"))
             {
                 if (currentRoom.objsContains(input))
                 {
                     System.out.println(houndCorpse.getDesc());
                 }
             }
-            else if (input.equals("rabid hound corpse") || input.equals("rabid hound"))
+            else if (input.equals("rabid hound corpse"))
             {
                 if (currentRoom.objsContains(input))
                 {
                     System.out.println(houndCorpse2.getDesc());
                 }
             }
-            else if (input.equals("prison guard corpse") || input.equals("prison guard") || input.equals("guard corpse"))
+            else if (input.equals("prison guard corpse"))
             {
                 if (currentRoom.objsContains(input))
                 {
                     System.out.println(guardCorpse.getDesc());
+                }
+            }
+            else if (input.equals("ballistic guard corpse"))
+            {
+                if (currentRoom.objsContains("prison guard corpse"))
+                {
+                    System.out.println(guardCorpse.getDesc());
+                }
+            }
+            else if (input.equals("ghoul corpse"))
+            {
+                if (currentRoom.objsContains(input))
+                {
+                    System.out.println(ghoulCorpse.getDesc());
+                }
+            }
+            else if (input.equals("skeleton corpse"))
+            {
+                if (currentRoom.objsContains(input))
+                {
+                    System.out.println(skeletonCorpse.getDesc());
                 }
             }
             else if (input.equals("blue herb"))
@@ -1081,6 +1212,34 @@
                 if (currentRoom.objsContains(input) || player.hasItem("glass shards"))
                 {
                     System.out.println(glassShards.getDesc());
+                }
+            }
+            else if (input.equals("matches"))
+            {
+                if (currentRoom.objsContains(input) || player.hasItem("matches"))
+                {
+                    System.out.println(matches.getDesc());
+                }
+            }
+            else if (input.equals("locked metal door"))
+            {
+                if (currentRoom.objsContains(input))
+                {
+                    System.out.println(lockedMetalDoor.getDesc());
+                }
+            }
+            else if (input.equals("minecart"))
+            {
+                if (currentRoom.objsContains(input))
+                {
+                    System.out.println(minecart.getDesc());
+                }
+            }
+            else if (input.equals("rusty key"))
+            {
+                if (player.hasItem("rusty key"))
+                {
+                    System.out.println(rustyKey.getDesc());
                 }
             }
             else
@@ -1105,7 +1264,28 @@
                         barrel.getItems();
                         barrel.randomLoot(player, barrel);
                         barrel.setLoot(false); //can no longer loot it
-                        System.out.println("You looted the barrel!");
+                        System.out.println("You looted the "  + input + "!");
+                    }
+                    else
+                    {
+                        System.out.println("There's nothing in the " + input + ".");
+                    }
+                }
+                else
+                {
+                    System.out.println("There's no " + input + " to search.");
+                }
+            }
+            else if (input.equals("minecart"))
+            {
+                if (currentRoom.objsContains(input))
+                {
+                    if (minecart.isLootable())
+                    {
+                        minecart.getItems();
+                        minecart.randomLoot(player, minecart);
+                        minecart.setLoot(false); //can no longer loot it
+                        System.out.println("You looted the "  + input + "!");
                     }
                     else
                     {
@@ -1132,14 +1312,25 @@
             }
             else if (enemyAttacking.equals("rabid hound"))
             {
-                xpGained = 50;
+                xpGained = 100;
             }
             else if (enemyAttacking.equals("prison guard"))
             {
                 xpGained = 200;
             }
+            else if (enemyAttacking.equals("ballistic guard"))
+            {
+                xpGained = 200;
+            }
+            else if (enemyAttacking.equals("prisoner ghoul"))
+            {
+                xpGained = 50;
+            }
+            else if (enemyAttacking.equals("animated skeleton"))
+            {
+                xpGained = 75;
+            }
             System.out.println("You got " + xpGained + " XP!");
             player.levelCalc(xpGained);
         }
     } // end main class
-
