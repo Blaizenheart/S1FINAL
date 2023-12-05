@@ -2,6 +2,7 @@ import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
+import java.lang.Math;
 
 public class Game
 {
@@ -102,11 +103,11 @@ public class Game
     
     static Actor cavebeing = new Actor("cavebeing", 1, 5, 800, 800, 0, "", new ArrayList<>(), false);
 
-    static Actor cavegnome = new Actor("cavegnome", 1, 5, 300, 300, 0, "", new ArrayList<>(), false);
+    static Actor cavegnome = new Actor("cavegnome", 1, 5, 300, 300, 0, "claws", new ArrayList<>(), false);
     
     static Actor rockMonster = new Actor("rocky amalgamation", 1, 5, 2000, 2000, 0, "", new ArrayList<>(), false);
 
-    static Actor zombieMiner = new Actor("zombie miner", 1, 5, 200, 200, 0, "", new ArrayList<>(), false);
+    static Actor zombieMiner = new Actor("zombie miner", 1, 5, 200, 200, 0, "pickaxe", new ArrayList<>(), false);
 
     static Actor enemy = new Actor(); // will be used to reference different actors later
 
@@ -274,6 +275,12 @@ public class Game
                 playerClass = "outlander";
                 confirming = false;
             }
+            else if (input2 == 5)
+            {
+                System.out.println("\nYou have chosen the Developer class.");
+                playerClass = "dev";
+                confirming = false;
+            }
             else
             {
                 System.out.println("\nPlease input 1, 2, 3, or 4.");
@@ -322,7 +329,7 @@ public class Game
                     + "\njourneyed out to find this man, stumbling upon a dungeon on the"
                     + "\noutskirts of the neighboring country.");
         }
-        else //outlander
+        else if (playerClass.equals("outlander"))
         {
             player.setAtk(20);
             player.setDef(20);
@@ -334,6 +341,16 @@ public class Game
                     + "\nabout. You sought out the man responsible for the deaths of"
                     + "\nyour loved ones, which brought you to a dungeon on the"
                     + "\noutskirts of the neighboring country.");
+        }
+        else //dev
+        {
+            player.setAtk(100);
+            player.setDef(20);
+            player.setHp(1000);
+            player.setMaxHp(1000);
+            player.setGold(10);
+            player.addSpell("fireball");
+            player.addSpell("healing word");
         }
         System.out.println("\nAs you near the dungeon, the mist begins to get thicker...\n");
 
@@ -1139,14 +1156,8 @@ public class Game
                     if (!currentRoom.getLight()) //if player is in a room without light it updates the room desc
                     {
                         System.out.println("\nYou can see now!");
-                        if (currentRoom.getName().equals("Cavern"))
-                        {
-                            cavern.setLight(true);
-                        }
-                        else
-                        {
-                            prisonB.setLight(true);
-                        }
+                        cavern.setLight(true);
+                        prisonB.setLight(true);
                         System.out.println(currentRoom.roomState()); //prints the room desc againeere
                     }
                     else
@@ -1343,6 +1354,7 @@ public class Game
         {
             if (player.hasSpell("fireball"))
             {
+                player.subHp(5); // a small price to pay
                 if (player.missChance())
                 {
                     System.out.println("\nYou miss! The " + enemy.getName() + " narrowly dodges your attack!");
@@ -1369,8 +1381,9 @@ public class Game
         {
             if (player.hasSpell("healing word"))
             {
-                player.addHp(generator.nextInt() * generator.nextInt());
-                System.out.println("You've restored some of your health!");
+                int hp = generator.nextInt(7) * generator.nextInt(7);
+                player.addHp(hp);
+                System.out.println("You've restored " + hp + " health!");
                 playerTurn = false;
             }
             else
