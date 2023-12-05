@@ -91,11 +91,11 @@ public class Game
 
     static Actor hound2 = new Actor("rabid hound", 1, 5, 250, 400, 0, "claws", new ArrayList<>(), false);
 
-    static Actor prisonGuardA = new Actor("prison guard", 1, 7, 800, 800, 0, "cleaver", new ArrayList<>(), false);
+    static Actor prisonGuardA = new Actor("prison guard", 1, 5, 800, 800, 0, "cleaver", new ArrayList<>(), false);
 
-    static Actor prisonGuardB = new Actor("ballistic guard", 1, 7, 500, 500, 0, "ballista", new ArrayList<>(), false);
+    static Actor prisonGuardB = new Actor("ballistic guard", 1, 5, 500, 500, 0, "ballista", new ArrayList<>(), false);
 
-    static Actor prisonGuardC = new Actor("elite guard", 1, 9, 1200, 1200, 0, "cleaver", List.of("copper key"), false);
+    static Actor prisonGuardC = new Actor("elite guard", 1, 5, 1200, 1200, 0, "cleaver", List.of("copper key"), false);
 
     static Actor ghoul = new Actor("prisoner ghoul", 1, 5, 100, 100, 0, "", new ArrayList<>(), false);
 
