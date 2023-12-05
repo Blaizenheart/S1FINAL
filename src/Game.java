@@ -279,7 +279,7 @@ public class Game
         else if (playerClass.equals("knight"))
         {
             player.setAtk(40);
-            player.setDef(100);
+            player.setDef(60);
             player.setGold(40);
             player.setWeapon("sword");
             player.addItem("blue herb");
@@ -816,6 +816,7 @@ public class Game
             {
                 damage /= factor;
             }
+            damage -= player.getDef()/3;
             System.out.println("\nYou take " + damage + " damage!");
             player.subHp(damage);
         }
