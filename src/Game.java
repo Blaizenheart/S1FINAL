@@ -15,6 +15,7 @@ public class Game
     static String playerName = "";
     static String playerClass = "";
     static int turn;
+    static List<String> barrelRooms = new ArrayList<>(); //will be used to store the names of the rooms where the barrel has been looted
     static String input; // will be used to store scanner input
 
     // STATUS EFFECTS
@@ -95,17 +96,17 @@ public class Game
 
     static Actor prisonGuardC = new Actor("elite guard", 1, 9, 1200, 1200, 0, "cleaver", List.of("copper key"), false);
 
-    static Actor ghoul = new Actor("prisoner ghoul", 1, 2, 100, 100, 0, "", new ArrayList<>(), false);
+    static Actor ghoul = new Actor("prisoner ghoul", 1, 5, 100, 100, 0, "", new ArrayList<>(), false);
 
-    static Actor skeleton = new Actor("silly skeleton", 1, 2, 200, 200, 0, "", new ArrayList<>(), false);
+    static Actor skeleton = new Actor("silly skeleton", 1, 5, 200, 200, 0, "", new ArrayList<>(), false);
     
     static Actor cavebeing = new Actor("cavebeing", 1, 5, 800, 800, 0, "", new ArrayList<>(), false);
 
     static Actor cavegnome = new Actor("cavegnome", 1, 5, 300, 300, 0, "", new ArrayList<>(), false);
     
-    static Actor rockMonster = new Actor("rocky amalgamation", 1, 1, 2000, 2000, 0, "", new ArrayList<>(), false);
+    static Actor rockMonster = new Actor("rocky amalgamation", 1, 5, 2000, 2000, 0, "", new ArrayList<>(), false);
 
-    static Actor zombieMiner = new Actor("zombie miner", 1, 2, 200, 200, 0, "", new ArrayList<>(), false);
+    static Actor zombieMiner = new Actor("zombie miner", 1, 5, 200, 200, 0, "", new ArrayList<>(), false);
 
     static Actor enemy = new Actor(); // will be used to reference different actors later
 
@@ -315,6 +316,7 @@ public class Game
             player.setGold(15);
             player.addItem("blue herb");
             player.addSpell("fireball");
+            player.addSpell("healing word");
             System.out.println("You received a vision about a man who had been captured during"
                     + "\nthe war who has the power to unite the different kingdoms. You"
                     + "\njourneyed out to find this man, stumbling upon a dungeon on the"
@@ -1363,6 +1365,19 @@ public class Game
                 System.out.println("You don't have that spell!");
             }
         }
+        else if (input.equals("healing word")) // very long if-statement for each spell the player can cast
+        {
+            if (player.hasSpell("healing word"))
+            {
+                player.addHp(generator.nextInt() * generator.nextInt());
+                System.out.println("You've restored some of your health!");
+                playerTurn = false;
+            }
+            else
+            {
+                System.out.println("You don't have that spell!");
+            }
+        }
         else
         {
             System.out.println("Invalid spell name.");
@@ -1575,10 +1590,10 @@ public class Game
         {
             if (currentRoom.objsContains(input))
             {
-                if (barrel.isLootable())
+                if (!barrelRooms.contains(currentRoom.getName()))
                 {
                     barrel.getItems();
-                    barrel.setLoot(false); //can no longer loot it
+                    barrelRooms.add(currentRoom.getName()); // the barrel has been looted in this room
                     System.out.println("You looted the "  + input + "!");
                     System.out.println("+" + barrel.randomLoot(player, barrel));
                 }
@@ -1635,7 +1650,7 @@ public class Game
                 System.out.println("There's no " + input + " to search.");
             }
         }
-        if (input.length() > 6)
+        else if (input.length() > 6)
         {
             if (input.substring(input.length()-6).equals("corpse") && currentRoom.objsContains(input)) // player is trying to search a corpse w/o loot
             {
