@@ -63,7 +63,7 @@ public class Game
     static Room cavern = new Room("Cavern",
             "This is a relatively big area. The ground is broken into \ndifferent chunks that are raised some distance from the actual \n"
                     + "floor of the cavern. The drop from here would be fatal. There \nare several bridges that connect the land masses.",
-            false, true, false, false, false, List.of("cave-being", "cave gnome"), List.of("metal gate")); // west exit unlocked later w/ key
+            false, true, false, false, false, List.of("cavebeing", "cavegnome"), List.of("metal gate")); // west exit unlocked later w/ key
 
     static Room mines = new Room("Mines",
             "The area is composed of diverging and converging tunnel \nstructures. This place was likely created with the intention of \nbeing used for mineral extraction. \nWhat came first, the dungeon or the mines?",
@@ -76,7 +76,7 @@ public class Game
     static Room catacombs = new Room("Catacombs",
             "Stacks of skulls yellowed from time fill the walls, and random \nbones are scattered across the floor. The catacombs are faintly"
                     + "\nlit by lanterns. The air smells stale.",
-            false, false, true, false, true, new ArrayList<>(), new ArrayList<>()); // north exit unlocked later w/ key
+            false, false, true, false, true, new ArrayList<>(), List.of("large door")); // north exit unlocked later w/ key
 
     static Room catacombCell = new Room("Catacomb Cell",
             "A single cell sits at the end of the catacombs. The bars are thick.",
@@ -93,7 +93,7 @@ public class Game
 
     static Actor prisonGuardB = new Actor("ballistic guard", 1, 5, 500, 500, 0, "ballista", new ArrayList<>(), false);
 
-    static Actor prisonGuardC = new Actor("elite guard", 1, 5, 1200, 1200, 0, "cleaver", new ArrayList<>(), false);
+    static Actor prisonGuardC = new Actor("elite guard", 1, 5, 1200, 1200, 0, "cleaver", List.of("copper key"), false);
 
     static Actor ghoul = new Actor("prisoner ghoul", 1, 1, 100, 100, 0, "", new ArrayList<>(), false);
 
@@ -112,7 +112,10 @@ public class Game
 
     static Obj guardCorpse = new Obj("prison guard corpse",
             "It is the corpse of a mutated prison guard. Odd tumor-like \nclumps of flesh have formed all over its body. Perhaps it was human once.", false, true, false, List.of("blue vial"));
-
+            
+    static Obj eliteCorpse = new Obj("elite guard corpse",
+            "It is the corpse of a mutated elite guard. This one was \nlikely in charge of the other prison guards, judging from the larger stature.", false, true, false, List.of("blue vial"));        
+            
     static Obj ghoulCorpse = new Obj("ghoul corpse",
             "It is the corpse of a ghoul. It is wearing a tattered prisoner's\n attire. The veins across its body are bloodshot red, and its hands seem burnt.", false, false, false, new ArrayList<>());
 
@@ -141,6 +144,18 @@ public class Game
 
     static Obj rustyKey = new Obj("rusty key",
             "The metal key is rusting at the edges.", false, false, true, new ArrayList<>());
+            
+    static Obj metalGate = new Obj("metal gate",
+            "The metal gate is locked with a copper padlock. If you had a key, \nperhaps you could unlock it.", true, false, false, new ArrayList<>());
+
+    static Obj copperKey = new Obj("copper key",
+            "The copper key seems to be in good condition.", false, false, true, new ArrayList<>());        
+            
+    static Obj giantDoor = new Obj("giant door",
+            "The door stands tall, but fortunately, the keyhole is within your \nreach. If you had a key, perhaps you could unlock it.", true, false, false, new ArrayList<>());
+
+    static Obj largeKey = new Obj("large key",
+            "The key is large but surprisingly light.", false, false, true, new ArrayList<>());        
 
     static Obj minecart = new Obj("minecart",
             "The minecart is filled with rocks.", false, true, false, List.of("rusty key"));
@@ -186,7 +201,7 @@ public class Game
             System.out.println("\n> " + playerName);
             System.out.println("\nIs this name correct? (Yes/No)");
 
-            input = scan.nextLine();
+            input = scan.nextLine().trim();
             input = input.toLowerCase();
 
             if (input.equals("no"))
@@ -323,7 +338,6 @@ public class Game
             {
                 System.out.println(currentRoom.roomState()); // prints upon entering room
                 allowedMove = false;
-                timeCount = 0; // "time" reset
             }
 
             if (fighting)
@@ -392,7 +406,7 @@ public class Game
                         // start of player turn
                         while (playerTurn) // repeats until the player has inputted a valid command
                         {
-                            input = scan.nextLine();
+                            input = scan.nextLine().trim();
                             input = input.toLowerCase();
 
                             System.out.println("\n> " + input);
@@ -511,7 +525,7 @@ public class Game
             }
             else
             {
-                input = scan.nextLine();
+                input = scan.nextLine().trim();
                 input = input.toLowerCase();
                 timeCount++; // increases this counter for every "turn" the player takes within a room
 
@@ -539,7 +553,7 @@ public class Game
                 {
                     System.out.println("\nWhere do you want to move? (North/East/South/West)");
 
-                    input = scan.nextLine();
+                    input = scan.nextLine().trim();
                     input = input.toLowerCase();
 
                     System.out.println("\n> " + input);
@@ -586,7 +600,6 @@ public class Game
                         Game.moveTo("west");
                     }
                 }
-
                 //displays information
                 if (input.equals("inventory"))
                 {
@@ -632,7 +645,6 @@ public class Game
                 if (input.equals("fight") || input.equals("attack"))
                 {
                     fightCommand();
-
                 }
 
                 if (input.equals("quit"))
@@ -926,7 +938,7 @@ public class Game
                 System.out.println("\n" + currentRoom.getEnemyList());
                 System.out.println("\nWhich enemy will you attack?");
 
-                input = scan.nextLine();
+                input = scan.nextLine().trim();
                 input = input.toLowerCase();
 
                 System.out.println("\n> " + input);
@@ -960,7 +972,7 @@ public class Game
         {
             System.out.println("\nWhat do you want to use?");
 
-            input = scan.nextLine();
+            input = scan.nextLine().trim();
             input = input.toLowerCase();
 
             System.out.println("\n> " + input);
@@ -1063,8 +1075,6 @@ public class Game
                         cavern.setLight(true);
                         prisonB.setLight(true);
                     }
-
-
                 }
                 else
                 {
@@ -1089,6 +1099,42 @@ public class Game
                     System.out.println("You don't have a rusty key to use!");
                 }
             }
+            else if (input.equals("copper key"))
+            {
+                if (player.hasItem(input) && currentRoom.objsContains("metal gate"))
+                {
+                    System.out.println("You try fitting the " + input + " into the metal gate.");
+                    System.out.println("It fits perfectly!");
+                    currentRoom.removeObj(currentRoom.getObjIndex("metal gate"));
+                    player.subItem(player.inventoryIndex("copper key"));
+                    metalGate.setLock(false);
+                    currentRoom.setWestExit(true);
+                    metalDoor.setDesc("The metal gate is unlocked now.");
+                    System.out.println(currentRoom.roomState());
+                }
+                else
+                {
+                    System.out.println("You don't have a copper key to use!");
+                }
+            }
+            else if (input.equals("large key"))
+            {
+                if (player.hasItem(input) && currentRoom.objsContains("giant door"))
+                {
+                    System.out.println("You try fitting the " + input + " into the giant door.");
+                    System.out.println("It fits perfectly!");
+                    currentRoom.removeObj(currentRoom.getObjIndex("metal gate"));
+                    player.subItem(player.inventoryIndex("large key"));
+                    giantDoor.setLock(false);
+                    currentRoom.setNorthExit(true);
+                    metalDoor.setDesc("The giant door is unlocked now.");
+                    System.out.println(currentRoom.roomState());
+                }
+                else
+                {
+                    System.out.println("You don't have a copper key to use!");
+                }
+            }
             else
             {
                 System.out.println("\nInvalid item.");
@@ -1102,7 +1148,7 @@ public class Game
         {
             System.out.println("\nWhat do you want to take?");
 
-            input = scan.nextLine();
+            input = scan.nextLine().trim();
             input = input.toLowerCase();
 
             System.out.println("\n> " + input);
@@ -1185,6 +1231,19 @@ public class Game
                     System.out.println("\nThat's not in here.");
                 }
             }
+            else if (input.equals("large key"))
+            {
+                if (currentRoom.objsContains(input))
+                {
+                    System.out.println("You take the " + input + ".");
+                    player.addItem("large key");
+                    currentRoom.removeObj(currentRoom.getObjIndex(input));
+                }
+                else
+                {
+                    System.out.println("\nThat's not in here.");
+                }
+            }
             else
             {
                 System.out.println("\nInvalid item.");
@@ -1197,7 +1256,7 @@ public class Game
         System.out.println(player.openSpells());
         System.out.println("What spell do you want to use?");
 
-        input = scan.nextLine();
+        input = scan.nextLine().trim();
         input = input.toLowerCase();
         System.out.println("\n> " + input);
 
@@ -1237,7 +1296,7 @@ public class Game
     {
         System.out.println("What do you want to examine?");
 
-        input = scan.nextLine();
+        input = scan.nextLine().trim();
         input = input.toLowerCase();
         System.out.println("\n> " + input);
         if (input.equals("feral hound corpse"))
@@ -1272,7 +1331,7 @@ public class Game
         {
             if (currentRoom.objsContains("elite guard corpse"))
             {
-                System.out.println(guardCorpse.getDesc());
+                System.out.println(eliteCorpse.getDesc());
             }
         }
         else if (input.equals("ghoul corpse"))
@@ -1338,6 +1397,34 @@ public class Game
                 System.out.println(rustyKey.getDesc());
             }
         }
+        else if (input.equals("copper key"))
+        {
+            if (player.hasItem("copper key"))
+            {
+                System.out.println(copperKey.getDesc());
+            }
+        }
+        else if (input.equals("metal gate"))
+        {
+            if (player.hasItem("metal gate"))
+            {
+                System.out.println(metalGate.getDesc());
+            }
+        }
+        else if (input.equals("large key"))
+        {
+            if (player.hasItem("large key"))
+            {
+                System.out.println(largeKey.getDesc());
+            }
+        }
+        else if (input.equals("giant door"))
+        {
+            if (player.hasItem("giant door"))
+            {
+                System.out.println(giantDoor.getDesc());
+            }
+        }
         else
         {
             System.out.println("\nInvalid input.");
@@ -1348,7 +1435,7 @@ public class Game
     {
         System.out.println("What do you want to search?");
 
-        input = scan.nextLine();
+        input = scan.nextLine().trim();
         input = input.toLowerCase();
         System.out.println("\n> " + input);
         if (input.equals("barrel"))
@@ -1386,6 +1473,28 @@ public class Game
                 else
                 {
                     System.out.println("There's nothing in the " + input + ".");
+                }
+            }
+            else
+            {
+                System.out.println("There's no " + input + " to search.");
+            }
+        }
+        else if (input.equals("elite guard corpse"))
+        {
+            if (currentRoom.objsContains(input))
+            {
+                if (eliteCorpse.isLootable())
+                {
+                    eliteCorpse.getItems();
+                    eliteCorpse.transferItems(player);
+                    eliteCorpse.setLoot(false); //can no longer loot it
+                    System.out.println("You looted the "  + input + "!");
+                    System.out.println("+copper key");
+                }
+                else
+                {
+                    System.out.println("The elite guard doesn't have anything valuable.");
                 }
             }
             else
