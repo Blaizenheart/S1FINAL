@@ -312,6 +312,10 @@ public class Actor
         {
             additionalAtk = 4;
         }
+        else if (weapon.equals("pickaxe"))
+        {
+            additionalAtk = 4;
+        }
         else
         {
             additionalAtk = 0;
