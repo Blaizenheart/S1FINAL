@@ -102,7 +102,7 @@ public class Obj
         int rand;
         if (obj.getName().equals("barrel"))
         {
-            rand = Game.generator.nextInt(4) + 1;  // 1-3
+            rand = Game.generator.nextInt(6) + 1;  // 1-5
             if (rand == 1)
             {
                 actor.addItem("blue vial");
@@ -116,7 +116,17 @@ public class Obj
             else if (rand == 3)
             {
                 actor.addItem("glass shards");
-                output = "glass shard";
+                output = "glass shards";
+            }
+            else if (rand == 4)
+            {
+                actor.addItem("dried meat");
+                output = "dried meat";
+            }
+            else
+            {
+                actor.addItem("meatpie");
+                output = "meatpie";
             }
         }
         return output;
