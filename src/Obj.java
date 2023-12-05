@@ -88,14 +88,6 @@ public class Obj
 
     ////////////////////////////// BRAIN METHODS //////////////////////////////
 
-    public void transferItems(Actor actor) // transfer items into the player's inventory
-    {
-        for (int i = 0; i < itemsList.size(); i++)
-        {
-            actor.addItem(itemsList.get(i));
-        }
-    }
-
     public String randomLoot(Actor actor, Obj obj) // player gets a random item
     {
         String output = "";
