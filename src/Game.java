@@ -65,11 +65,11 @@ public class Game
     static Room cavern = new Room("Cavern",
             "This is a relatively big area. The ground is broken into \ndifferent chunks that are raised some distance from the actual \n"
                     + "floor of the cavern. The drop from here would be fatal. There \nare several bridges that connect the land masses.",
-            false, true, false, false, false, List.of("cavebeing", "cavegnome"), List.of("metal gate")); // west exit unlocked later w/ key
+            false, true, true, false, false, List.of("cavebeing", "cavegnome"), List.of("metal gate")); // west exit unlocked later w/ key
 
     static Room mines = new Room("Mines",
             "The area is composed of diverging and converging tunnel \nstructures. This place was likely created with the intention of \nbeing used for mineral extraction. \nWhat came first, the dungeon or the mines?",
-            false, true, false, false, true, List.of("zombie miner", "rocky amalgamation"), List.of("minecart", "barrel", "blue herb"));
+            false, true, true, false, true, List.of("zombie miner", "rocky amalgamation"), List.of("minecart", "barrel", "blue herb"));
 
     static Room eastWing = new Room("East Wing",
             "A large room lined with broken suits of armor. The ceiling \nseems to be held up by wooden beams of questionable integrity.",
@@ -351,6 +351,7 @@ public class Game
             player.setGold(10);
             player.addSpell("fireball");
             player.addSpell("healing word");
+            player.setPlayerClass("mercenary"); //stealth bonus
         }
         System.out.println("\nAs you near the dungeon, the mist begins to get thicker...\n");
 
@@ -1553,35 +1554,35 @@ public class Game
         }
         else if (input.equals("rusty key"))
         {
-            if (player.hasItem("rusty key"))
+            if (player.hasItem(input))
             {
                 System.out.println(rustyKey.getDesc());
             }
         }
         else if (input.equals("copper key"))
         {
-            if (player.hasItem("copper key"))
+            if (player.hasItem(input))
             {
                 System.out.println(copperKey.getDesc());
             }
         }
         else if (input.equals("metal gate"))
         {
-            if (player.hasItem("metal gate"))
+            if (currentRoom.objsContains(input))
             {
                 System.out.println(metalGate.getDesc());
             }
         }
         else if (input.equals("large key"))
         {
-            if (player.hasItem("large key"))
+            if (player.hasItem(input))
             {
                 System.out.println(largeKey.getDesc());
             }
         }
         else if (input.equals("giant door"))
         {
-            if (player.hasItem("giant door"))
+            if (currentRoom.objsContains(input))
             {
                 System.out.println(giantDoor.getDesc());
             }
@@ -1627,9 +1628,10 @@ public class Game
                 if (minecart.isLootable())
                 {
                     minecart.getItems();
-                    minecart.randomLoot(player, minecart);
                     minecart.setLoot(false); //can no longer loot it
                     System.out.println("You looted the "  + input + "!");
+                    player.addItem("rusty key");
+                    System.out.println("+rusty key");
                 }
                 else
                 {
@@ -1648,9 +1650,9 @@ public class Game
                 if (eliteCorpse.isLootable())
                 {
                     eliteCorpse.getItems();
-                    eliteCorpse.transferItems(player);
                     eliteCorpse.setLoot(false); //can no longer loot it
                     System.out.println("You looted the "  + input + "!");
+                    player.addItem("copper key");
                     System.out.println("+copper key");
                 }
                 else
