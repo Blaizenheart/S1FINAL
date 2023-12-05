@@ -38,15 +38,15 @@ public class Game
 
     static Room innerHall = new Room("Inner Hall",
             "The cobblestone halls of the dungeon are dimly lit \nby flickering torches. The smell of \ndeath lingers in the air.",
-            true, false, false, true, true, List.of("prison guard"), new ArrayList<>());
+            true, false, false, true, true, List.of("prison guard"), List.of("glass shards", "glass shards", "barrel"));
 
     static Room basement = new Room("Basement",
             "The walls are crumbling at the edges. The air has a \nsort of sickly stench to it.",
-            true, true, false, false, true, new ArrayList<>(), new ArrayList<>());
+            true, true, false, false, true, new ArrayList<>(), List.of("meatpie"));
 
     static Room prisonA = new Room("Prison",
             "Rows of cells seem to extend further into the next room.\nThis seems to be the place prisoners are kept.",
-            true, false, true, true, true, List.of("prisoner ghoul", "animated skeleton"), new ArrayList<>());
+            true, false, true, true, true, List.of("prisoner ghoul", "silly skeleton"), List.of("barrel", "glass shards"));
 
     static Room prisonB = new Room("Deep Prison",
             "There is water dripping off of the ceiling, pooling on top \nof the uneven cobblestone ground. This seems to be the \nsecond half of the prisons.",
@@ -58,7 +58,7 @@ public class Game
 
     static Room hiddenChamber = new Room("Hidden Chamber",
             "This is a small, oddly normal room. There are a few dusty \nbookshelves lined against the wall.",
-            false, false, true, false, true, new ArrayList<>(), new ArrayList<>());
+            false, false, true, false, true, new ArrayList<>(), List.of("large key", "blue vial"));
 
     static Room cavern = new Room("Cavern",
             "This is a relatively big area. The ground is broken into \ndifferent chunks that are raised some distance from the actual \n"
@@ -67,16 +67,16 @@ public class Game
 
     static Room mines = new Room("Mines",
             "The area is composed of diverging and converging tunnel \nstructures. This place was likely created with the intention of \nbeing used for mineral extraction. \nWhat came first, the dungeon or the mines?",
-            false, true, false, false, true, List.of("zombie miner", "rocky amalgamation"), List.of("minecart"));
+            false, true, false, false, true, List.of("zombie miner", "rocky amalgamation"), List.of("minecart", "barrel", "blue herb"));
 
     static Room eastWing = new Room("East Wing",
             "A large room lined with broken suits of armor. The ceiling \nseems to be held up by wooden beams of questionable integrity.",
-            true, false, false, true, true, new ArrayList<>(), new ArrayList<>());
+            true, false, false, true, true, new ArrayList<>(), List.of("glass shards", "glass shards", "barrel"));
 
     static Room catacombs = new Room("Catacombs",
             "Stacks of skulls yellowed from time fill the walls, and random \nbones are scattered across the floor. The catacombs are faintly"
                     + "\nlit by lanterns. The air smells stale.",
-            false, false, true, false, true, new ArrayList<>(), List.of("large door")); // north exit unlocked later w/ key
+            false, false, true, false, true, new ArrayList<>(), List.of("giant door")); // north exit unlocked later w/ key
 
     static Room catacombCell = new Room("Catacomb Cell",
             "A single cell sits at the end of the catacombs. The bars are thick.",
@@ -85,19 +85,27 @@ public class Game
     static Room currentRoom = new Room(); // will be used to reference different room objects later
 
     ////////////////////////////// ACTOR OBJECTS //////////////////////////////
-    static Actor hound = new Actor("feral hound", 1, 2, 400, 400, 0, "claws", new ArrayList<>(), false);
+    static Actor hound = new Actor("feral hound", 1, 5, 400, 400, 0, "claws", new ArrayList<>(), false);
 
-    static Actor hound2 = new Actor("rabid hound", 1, 2, 250, 400, 0, "claws", new ArrayList<>(), false);
+    static Actor hound2 = new Actor("rabid hound", 1, 5, 250, 400, 0, "claws", new ArrayList<>(), false);
 
-    static Actor prisonGuardA = new Actor("prison guard", 1, 5, 800, 800, 0, "cleaver", new ArrayList<>(), false);
+    static Actor prisonGuardA = new Actor("prison guard", 1, 7, 800, 800, 0, "cleaver", new ArrayList<>(), false);
 
-    static Actor prisonGuardB = new Actor("ballistic guard", 1, 5, 500, 500, 0, "ballista", new ArrayList<>(), false);
+    static Actor prisonGuardB = new Actor("ballistic guard", 1, 7, 500, 500, 0, "ballista", new ArrayList<>(), false);
 
-    static Actor prisonGuardC = new Actor("elite guard", 1, 5, 1200, 1200, 0, "cleaver", List.of("copper key"), false);
+    static Actor prisonGuardC = new Actor("elite guard", 1, 9, 1200, 1200, 0, "cleaver", List.of("copper key"), false);
 
-    static Actor ghoul = new Actor("prisoner ghoul", 1, 1, 100, 100, 0, "", new ArrayList<>(), false);
+    static Actor ghoul = new Actor("prisoner ghoul", 1, 2, 100, 100, 0, "", new ArrayList<>(), false);
 
-    static Actor skeleton = new Actor("silly skeleton", 1, 1, 200, 200, 0, "", new ArrayList<>(), false);
+    static Actor skeleton = new Actor("silly skeleton", 1, 2, 200, 200, 0, "", new ArrayList<>(), false);
+    
+    static Actor cavebeing = new Actor("cavebeing", 1, 5, 800, 800, 0, "", new ArrayList<>(), false);
+
+    static Actor cavegnome = new Actor("cavegnome", 1, 5, 300, 300, 0, "", new ArrayList<>(), false);
+    
+    static Actor rockMonster = new Actor("rocky amalgamation", 1, 1, 2000, 2000, 0, "", new ArrayList<>(), false);
+
+    static Actor zombieMiner = new Actor("zombie miner", 1, 2, 200, 200, 0, "", new ArrayList<>(), false);
 
     static Actor enemy = new Actor(); // will be used to reference different actors later
 
@@ -121,7 +129,19 @@ public class Game
 
     static Obj skeletonCorpse = new Obj("skeleton corpse",
             "It is a skeleton. It's bones have become disconnected from one another.", false, false, false, new ArrayList<>());
-
+            
+    static Obj cavebeingCorpse = new Obj("cavebeing corpse",
+            "It is the corpse of some sort of cave-dwelling creature. It lacks\n any human traits, resembling more of a bipedal tree \nwith hard textured flesh instead of bark.", false, false, false, new ArrayList<>());
+    
+    static Obj cavegnomeCorpse = new Obj("cavegnome corpse",
+            "It is the corpse of a cavegnome, whatever that is. It has a small \nbody made of a hard mineral substance that is covered \nwith small fungi and masses of mold.", false, false, false, new ArrayList<>());
+    
+    static Obj rockMonsterCorpse = new Obj("pile of rocks",
+            "It has been reduced to a pile of rocks of varying sizes.", false, false, false, new ArrayList<>());
+    
+    static Obj zombieMinerCorpse = new Obj("zombie miner corpse",
+            "Is is the corpse of a miner. The body is in a terrible condition, \nand some of the bones are visible as areas of flesh have rotted and fallen off.", false, false, false, new ArrayList<>());
+            
     static Obj blueHerb = new Obj("blue herb",
             "It is a small blue-colored plant with medicinal properties.", false, false, true, new ArrayList<>());
 
@@ -804,6 +824,26 @@ public class Game
             System.out.println("\nThe skeleton unhinges its jaw, but no noise comes out...");
             System.out.println("It tries to grab you!");
         }
+        else if (enemy.getName().equals("cavebeing"))
+        {
+            System.out.println("\nThe cavebeing lets out an ominous rumble...");
+            System.out.println("It swings its fist towards you!");
+        }
+        else if (enemy.getName().equals("cavegnome"))
+        {
+            System.out.println("\nThe cavegnome lets out a loud shriek...");
+            System.out.println("It tries to scratch you!");
+        }
+        else if (enemy.getName().equals("rocky amalgamation"))
+        {
+            System.out.println("\nThe pile of sentient rocks slowly advances...");
+            System.out.println("It tries to hit you!");
+        }
+        else if (enemy.getName().equals("zombie miner"))
+        {
+            System.out.println("\nThe zombie mine raises its pickaxe arm...");
+            System.out.println("It brings the pickaxe down!");
+        }
 
         if (enemy.enemyMissChance(playerClass, enemyBlinded)) // sees if the enemy misses its attack
         {
@@ -816,7 +856,11 @@ public class Game
             {
                 damage /= factor;
             }
-            damage -= player.getDef()/3;
+            damage -= player.getDef()/2;
+            if (damage < 0)
+            {
+                damage = 0;
+            }
             System.out.println("\nYou take " + damage + " damage!");
             player.subHp(damage);
         }
@@ -887,6 +931,22 @@ public class Game
         {
             enemy.copyActor(skeleton);
         }
+        else if (enemyAttacking.equals("cavebeing"))
+        {
+            enemy.copyActor(cavebeing);
+        }
+        else if (enemyAttacking.equals("cavegnome"))
+        {
+            enemy.copyActor(cavegnome);
+        }
+        else if (enemyAttacking.equals("rocky amalgamation"))
+        {
+            enemy.copyActor(rockMonster);
+        }
+        else if (enemyAttacking.equals("zombie miner"))
+        {
+            enemy.copyActor(zombieMiner);
+        }
     }
 
     private static void addEnemyCorpse() // after defeating an enemy, adds a corpse to the objects of the room
@@ -918,6 +978,22 @@ public class Game
         else if (enemyAttacking.equals("silly skeleton"))
         {
             currentRoom.addObj("sheleton corpse");
+        }
+        else if (enemyAttacking.equals("cavebeing"))
+        {
+            currentRoom.addObj("cavebeing corpse");
+        }
+        else if (enemyAttacking.equals("cavegnome"))
+        {
+            currentRoom.addObj("cavegnome corpse");
+        }
+        else if (enemyAttacking.equals("rocky amalgamation"))
+        {
+            currentRoom.addObj("pile of rocks");
+        }
+        else if (enemyAttacking.equals("zombie miner"))
+        {
+            currentRoom.addObj("zombie miner corpse");
         }
     }
 
@@ -1349,6 +1425,62 @@ public class Game
                 System.out.println(skeletonCorpse.getDesc());
             }
         }
+        else if (input.equals("ballistic guard corpse"))
+        {
+            if (currentRoom.objsContains("prison guard corpse"))
+            {
+                System.out.println(guardCorpse.getDesc());
+            }
+        }
+        else if (input.equals("elite guard corpse"))
+        {
+            if (currentRoom.objsContains("elite guard corpse"))
+            {
+                System.out.println(eliteCorpse.getDesc());
+            }
+        }
+        else if (input.equals("ghoul corpse"))
+        {
+            if (currentRoom.objsContains(input))
+            {
+                System.out.println(ghoulCorpse.getDesc());
+            }
+        }
+        else if (input.equals("skeleton corpse"))
+        {
+            if (currentRoom.objsContains(input))
+            {
+                System.out.println(skeletonCorpse.getDesc());
+            }
+        }
+        else if (input.equals("cavebeing corpse"))
+        {
+            if (currentRoom.objsContains(input))
+            {
+                System.out.println(cavebeingCorpse.getDesc());
+            }
+        }
+        else if (input.equals("cavegnome corpse"))
+        {
+            if (currentRoom.objsContains(input))
+            {
+                System.out.println(cavegnomeCorpse.getDesc());
+            }
+        }
+        else if (input.equals("pile of rocks"))
+        {
+            if (currentRoom.objsContains(input))
+            {
+                System.out.println(rockMonsterCorpse.getDesc());
+            }
+        }
+        else if (input.equals("zombie miner corpse"))
+        {
+            if (currentRoom.objsContains(input))
+            {
+                System.out.println(zombieMinerCorpse.getDesc());
+            }
+        }
         else if (input.equals("blue herb"))
         {
             if (currentRoom.objsContains(input) || player.hasItem("blue herb"))
@@ -1503,6 +1635,17 @@ public class Game
                 System.out.println("There's no " + input + " to search.");
             }
         }
+        if (input.length() > 6)
+        {
+            if (input.substring(input.length()-6).equals("corpse") && currentRoom.objsContains(input)) // player is trying to search a corpse w/o loot
+            {
+                System.out.println("The " + input + " has nothing of value.");
+            }  
+        }
+        else if (currentRoom.objsContains(input)) // object is in the room but not lootable
+        {
+            System.out.println("You can't loot that.");
+        }
         else
         {
             System.out.println("\nInvalid input.");
@@ -1537,6 +1680,22 @@ public class Game
             xpGained = 50;
         }
         else if (enemyAttacking.equals("silly skeleton"))
+        {
+            xpGained = 75;
+        }
+        else if (enemyAttacking.equals("cavebeing"))
+        {
+            xpGained = 100;
+        }
+        else if (enemyAttacking.equals("cavegnome"))
+        {
+            xpGained = 75;
+        }
+        else if (enemyAttacking.equals("rocky amalgamation"))
+        {
+            xpGained = 200;
+        }
+        else if (enemyAttacking.equals("zombie miner"))
         {
             xpGained = 75;
         }
