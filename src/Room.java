@@ -259,10 +259,10 @@ public class Room
         String output = "";
         if (!objs.isEmpty())
         {
-            output = "There is ";
+            output = "There is a ";
             if (objs.size() == 1)
             {
-                output += "a " + objs.get(0) + ".";
+                output += objs.get(0) + ".";
             }
             else
             {
@@ -281,10 +281,10 @@ public class Room
         String output = "";
         if (!enemyList.isEmpty())
         {
-            output = "There is ";
+            output = "There is a ";
             if (enemyList.size() == 1)
             {
-                output += "a " + enemyList.get(0) + ".";
+                output += enemyList.get(0) + ".";
             }
             else
             {
