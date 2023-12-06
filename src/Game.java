@@ -87,27 +87,27 @@ public class Game
     static Room currentRoom = new Room(); // will be used to reference different room objects later
 
     ////////////////////////////// ACTOR OBJECTS //////////////////////////////
-    static Actor hound = new Actor("feral hound", 1, 5, 400, 400, 0, "claws", new ArrayList<>(), false);
+    static Actor hound = new Actor("feral hound", 1, 5, 400, 400, "claws", new ArrayList<>(), false);
 
-    static Actor hound2 = new Actor("rabid hound", 1, 5, 250, 400, 0, "claws", new ArrayList<>(), false);
+    static Actor hound2 = new Actor("rabid hound", 1, 5, 250, 400, "claws", new ArrayList<>(), false);
 
-    static Actor prisonGuardA = new Actor("prison guard", 1, 5, 800, 800, 0, "cleaver", new ArrayList<>(), false);
+    static Actor prisonGuardA = new Actor("prison guard", 1, 5, 800, 800, "cleaver", new ArrayList<>(), false);
 
-    static Actor prisonGuardB = new Actor("ballistic guard", 1, 5, 500, 500, 0, "ballista", new ArrayList<>(), false);
+    static Actor prisonGuardB = new Actor("ballistic guard", 1, 5, 500, 500, "ballista", new ArrayList<>(), false);
 
-    static Actor prisonGuardC = new Actor("elite guard", 1, 5, 1200, 1200, 0, "cleaver", List.of("copper key"), false);
+    static Actor prisonGuardC = new Actor("elite guard", 1, 5, 1200, 1200, "cleaver", List.of("copper key"), false);
 
-    static Actor ghoul = new Actor("prisoner ghoul", 1, 5, 100, 100, 0, "", new ArrayList<>(), false);
+    static Actor ghoul = new Actor("prisoner ghoul", 1, 5, 100, 100, "", new ArrayList<>(), false);
 
-    static Actor skeleton = new Actor("silly skeleton", 1, 5, 200, 200, 0, "", new ArrayList<>(), false);
+    static Actor skeleton = new Actor("silly skeleton", 1, 5, 200, 200, "", new ArrayList<>(), false);
     
-    static Actor cavebeing = new Actor("cavebeing", 1, 5, 800, 800, 0, "", new ArrayList<>(), false);
+    static Actor cavebeing = new Actor("cavebeing", 1, 5, 800, 800, "", new ArrayList<>(), false);
 
-    static Actor cavegnome = new Actor("cavegnome", 1, 5, 300, 300, 0, "claws", new ArrayList<>(), false);
+    static Actor cavegnome = new Actor("cavegnome", 1, 5, 300, 300, "claws", new ArrayList<>(), false);
     
-    static Actor rockMonster = new Actor("rocky amalgamation", 1, 5, 2000, 2000, 0, "", new ArrayList<>(), false);
+    static Actor rockMonster = new Actor("rocky amalgamation", 1, 5, 2000, 2000, "", new ArrayList<>(), false);
 
-    static Actor zombieMiner = new Actor("zombie miner", 1, 5, 200, 200, 0, "pickaxe", new ArrayList<>(), false);
+    static Actor zombieMiner = new Actor("zombie miner", 1, 5, 200, 200, "pickaxe", new ArrayList<>(), false);
 
     static Actor enemy = new Actor(); // will be used to reference different actors later
 
@@ -296,7 +296,6 @@ public class Game
         {
             player.setAtk(60);
             player.setDef(10);
-            player.setGold(15);
             player.setWeapon("dagger");
             player.addItem("blue herb");
 
@@ -308,7 +307,6 @@ public class Game
         {
             player.setAtk(40);
             player.setDef(60);
-            player.setGold(40);
             player.setWeapon("sword");
             player.addItem("blue herb");
 
@@ -320,7 +318,6 @@ public class Game
         {
             player.setAtk(15);
             player.setDef(20);
-            player.setGold(15);
             player.addItem("blue herb");
             player.addSpell("fireball");
             player.addSpell("healing word");
@@ -333,7 +330,6 @@ public class Game
         {
             player.setAtk(20);
             player.setDef(20);
-            player.setGold(10);
             player.setWeapon("bow");
             player.addItem("blue herb");
             System.out.println("Your village had been invaded by a military group, and as a"
@@ -348,7 +344,6 @@ public class Game
             player.setDef(20);
             player.setHp(1000);
             player.setMaxHp(1000);
-            player.setGold(10);
             player.addSpell("fireball");
             player.addSpell("healing word");
             player.setPlayerClass("mercenary"); //stealth bonus
