@@ -87,27 +87,27 @@ public class Game
     static Room currentRoom = new Room(); // will be used to reference different room objects later
 
     ////////////////////////////// ACTOR OBJECTS //////////////////////////////
-    static Actor hound = new Actor("feral hound", 1, 5, 400, 400, "claws", new ArrayList<>(), false);
+    static Actor hound = new Actor("feral hound", 1, 5, 400, 400, 0, "claws", new ArrayList<>(), false);
 
-    static Actor hound2 = new Actor("rabid hound", 1, 5, 250, 400, "claws", new ArrayList<>(), false);
+    static Actor hound2 = new Actor("rabid hound", 1, 5, 250, 400, 0, "claws", new ArrayList<>(), false);
 
-    static Actor prisonGuardA = new Actor("prison guard", 1, 5, 800, 800, "cleaver", new ArrayList<>(), false);
+    static Actor prisonGuardA = new Actor("prison guard", 1, 5, 800, 800, 0, "cleaver", new ArrayList<>(), false);
 
-    static Actor prisonGuardB = new Actor("ballistic guard", 1, 5, 500, 500, "ballista", new ArrayList<>(), false);
+    static Actor prisonGuardB = new Actor("ballistic guard", 1, 5, 500, 500, 0, "ballista", new ArrayList<>(), false);
 
-    static Actor prisonGuardC = new Actor("elite guard", 1, 5, 1200, 1200, "cleaver", List.of("copper key"), false);
+    static Actor prisonGuardC = new Actor("elite guard", 1, 5, 1200, 1200, 0, "cleaver", List.of("copper key"), false);
 
-    static Actor ghoul = new Actor("prisoner ghoul", 1, 5, 100, 100, "", new ArrayList<>(), false);
+    static Actor ghoul = new Actor("prisoner ghoul", 1, 5, 100, 100, 0, "", new ArrayList<>(), false);
 
-    static Actor skeleton = new Actor("silly skeleton", 1, 5, 200, 200, "", new ArrayList<>(), false);
+    static Actor skeleton = new Actor("silly skeleton", 1, 5, 200, 200, 0, "", new ArrayList<>(), false);
     
-    static Actor cavebeing = new Actor("cavebeing", 1, 5, 800, 800, "", new ArrayList<>(), false);
+    static Actor cavebeing = new Actor("cavebeing", 1, 5, 800, 800, 0, "", new ArrayList<>(), false);
 
-    static Actor cavegnome = new Actor("cavegnome", 1, 5, 300, 300, "claws", new ArrayList<>(), false);
+    static Actor cavegnome = new Actor("cavegnome", 1, 5, 300, 300, 0, "claws", new ArrayList<>(), false);
     
-    static Actor rockMonster = new Actor("rocky amalgamation", 1, 5, 2000, 2000, "", new ArrayList<>(), false);
+    static Actor rockMonster = new Actor("rocky amalgamation", 1, 5, 2000, 2000, 0, "", new ArrayList<>(), false);
 
-    static Actor zombieMiner = new Actor("zombie miner", 1, 5, 200, 200, "pickaxe", new ArrayList<>(), false);
+    static Actor zombieMiner = new Actor("zombie miner", 1, 5, 200, 200, 0, "pickaxe", new ArrayList<>(), false);
 
     static Actor enemy = new Actor(); // will be used to reference different actors later
 
@@ -196,6 +196,9 @@ public class Game
         boolean firstTurn = true;
         boolean firstBattle = true;
         boolean allowedMove = false;
+        boolean commandAccess = true;
+        boolean missionAccomplished = false;
+        boolean manAlive = true;
 
         // PLAYER CLASS DESCRIPTIONS
         String mercDesc = "Mercenaries deal in close combat, making them more vulnerable to attacks,"
@@ -561,131 +564,172 @@ public class Game
             }
             else
             {
-                input = scan.nextLine().trim();
-                input = input.toLowerCase();
-                timeCount++; // increases this counter for every "turn" the player takes within a room
-
-                System.out.println("\n> " + input);
-
-                ////////////////////////////// COMMANDS //////////////////////////////
-                // each turn outside of combat lets the player input commands to do different things
-
-                if (input.equals("help"))
+                if (commandAccess)
                 {
-                    System.out.println("These are the commands:");
-                    System.out.println("inventory = lists the items in your inventory");
-                    System.out.println("profile = opens your profile");
-                    System.out.println("spells = displays the spells you've learned");
-                    System.out.println("move = lets you move to different areas");
-                    System.out.println("look = describes the area around you");
-                    System.out.println("use = lets you use an item from your inventory");
-                    System.out.println("examine = lets you examine an object in the room");
-                    System.out.println("search = lets you search an object in the room");
-                    System.out.println("quit = quits the game :(");
-                }
-
-                //movement
-                if (input.equals("move"))
-                {
-                    System.out.println("\nWhere do you want to move? (North/East/South/West)");
-
                     input = scan.nextLine().trim();
                     input = input.toLowerCase();
+                    timeCount++; // increases this counter for every "turn" the player takes within a room
 
                     System.out.println("\n> " + input);
 
-                    allowedMove = currentRoom.canMove(input); // checks to see if the player can move in that direction
-                    if (allowedMove)
+                    ////////////////////////////// COMMANDS //////////////////////////////
+                    // each turn outside of combat lets the player input commands to do different things
+
+                    if (input.equals("help"))
                     {
-                        Game.moveTo(input); // moves the player to a different room
+                        System.out.println("These are the commands:");
+                        System.out.println("inventory = lists the items in your inventory");
+                        System.out.println("profile = opens your profile");
+                        System.out.println("spells = displays the spells you've learned");
+                        System.out.println("move = lets you move to different areas");
+                        System.out.println("look = describes the area around you");
+                        System.out.println("use = lets you use an item from your inventory");
+                        System.out.println("examine = lets you examine an object in the room");
+                        System.out.println("search = lets you search an object in the room");
+                        System.out.println("quit = quits the game :(");
+                    }
+
+                    //movement
+                    if (input.equals("move"))
+                    {
+                        System.out.println("\nWhere do you want to move? (North/East/South/West)");
+
+                        input = scan.nextLine().trim();
+                        input = input.toLowerCase();
+
+                        System.out.println("\n> " + input);
+
+                        allowedMove = currentRoom.canMove(input); // checks to see if the player can move in that direction
+                        if (allowedMove)
+                        {
+                            Game.moveTo(input); // moves the player to a different room
+                        }
+                    }
+
+                    if (input.equals("move north"))
+                    {
+                        allowedMove = currentRoom.canMove("north");
+                        if (allowedMove)
+                        {
+                            Game.moveTo("north");
+                        }
+                    }
+
+                    if (input.equals("move east"))
+                    {
+                        allowedMove = currentRoom.canMove("east");
+                        if (allowedMove)
+                        {
+                            Game.moveTo("east");
+                        }
+                    }
+
+                    if (input.equals("move south"))
+                    {
+                        allowedMove = currentRoom.canMove("south");
+                        if (allowedMove)
+                        {
+                            Game.moveTo("south");
+                        }
+                    }
+
+                    if (input.equals("move west"))
+                    {
+                        allowedMove = currentRoom.canMove("west");
+                        if (allowedMove)
+                        {
+                            Game.moveTo("west");
+                        }
+                    }
+                    
+                    //displays information
+                    if (input.equals("inventory"))
+                    {
+                        System.out.println(player.openInventory());
+                    }
+    
+                    if (input.equals("profile"))
+                    {
+                        System.out.println(player.openProfile());
+                    }
+
+                    if (input.equals("spells"))
+                    {
+                        System.out.println(player.openSpells());
+                    }
+
+                    //player interaction with environment
+                    if (input.equals("look") || input.equals("look around"))
+                    {
+                        System.out.println(currentRoom.roomState());
+                    }
+
+                    if (input.equals("use"))
+                    {
+                        useCommand();
+                    }
+
+                    if (input.equals("take") || input.equals("pick up") || input.equals("grab"))
+                    {
+                        takeCommand();
+                    }
+
+                    if (input.equals("search") || input.equals("loot"))
+                    {
+                        searchCommand();
+                    }
+
+                    if (input.equals("examine"))
+                    {
+                        examineCommand();
+                    }
+
+                    if (input.equals("fight") || input.equals("attack"))
+                    {
+                        fightCommand();
+                    }
+
+                    if (input.equals("quit"))
+                    {
+                        playing = false; // allows the player to leave the loop, therefore ending the game
                     }
                 }
-
-                if (input.equals("move north"))
+                else
                 {
-                    allowedMove = currentRoom.canMove("north");
-                    if (allowedMove)
-                    {
-                        Game.moveTo("north");
+                    if (turn < 100) //IT DOES MATTER!!!
+                    { // hes ALIVE!
+                        System.out.println("\nYou approach the cell. Behind it is a still silhouette lying on the ground...");
+                        System.out.println("But not yet completely still.");
+                        if (playerClass.equals("mercenary"))
+                        {
+                            System.out.println("This must be the man you were hired to find.");
+                        }
+                        else if (playerClass.equals("knight"))
+                        {
+                            System.out.println("There's no mistaking it... that's your captain!");
+                        }
+                        else if (playerClass.equals("darkPriest"))
+                        {
+                            System.out.println("This is probably the man from your visions.");
+                        }
+                        else if (playerClass.equals("outlander"))
+                        {
+                            System.out.println("You have no doubt in your mind that is the man that took everything from you.");
+                        }
+                        else  // dev class
+                        {
+                            
+                        }
                     }
-                }
-
-                if (input.equals("move east"))
-                {
-                    allowedMove = currentRoom.canMove("east");
-                    if (allowedMove)
+                    else
                     {
-                        Game.moveTo("east");
+                        manAlive = false;
+                        System.out.println("\nYou approach the cell. Behind it is a still silhouette lying on the ground...");
                     }
-                }
-
-                if (input.equals("move south"))
-                {
-                    allowedMove = currentRoom.canMove("south");
-                    if (allowedMove)
-                    {
-                        Game.moveTo("south");
-                    }
-                }
-
-                if (input.equals("move west"))
-                {
-                    allowedMove = currentRoom.canMove("west");
-                    if (allowedMove)
-                    {
-                        Game.moveTo("west");
-                    }
-                }
-                //displays information
-                if (input.equals("inventory"))
-                {
-                    System.out.println(player.openInventory());
-                }
-
-                if (input.equals("profile"))
-                {
-                    System.out.println(player.openProfile());
-                }
-
-                if (input.equals("spells"))
-                {
-                    System.out.println(player.openSpells());
-                }
-
-                //player interaction with environment
-                if (input.equals("look") || input.equals("look around"))
-                {
-                    System.out.println(currentRoom.roomState());
-                }
-
-                if (input.equals("use"))
-                {
-                    useCommand();
-                }
-
-                if (input.equals("take") || input.equals("pick up") || input.equals("grab"))
-                {
-                    takeCommand();
-                }
-
-                if (input.equals("search") || input.equals("loot"))
-                {
-                    searchCommand();
-                }
-
-                if (input.equals("examine"))
-                {
-                    examineCommand();
-                }
-
-                if (input.equals("fight") || input.equals("attack"))
-                {
-                    fightCommand();
-                }
-
-                if (input.equals("quit"))
-                {
-                    playing = false; // allows the player to leave the loop, therefore ending the game
+                    commandAccess = true;
+                    missionAccomplished = true;
+                    entrance.setSouthExit(true);
+                    // unlocks the south exit to the entrance... we can leave now!!
                 }
             }
         }
@@ -1420,34 +1464,6 @@ public class Game
             if (currentRoom.objsContains(input))
             {
                 System.out.println(guardCorpse.getDesc());
-            }
-        }
-        else if (input.equals("ballistic guard corpse"))
-        {
-            if (currentRoom.objsContains("prison guard corpse"))
-            {
-                System.out.println(guardCorpse.getDesc());
-            }
-        }
-        else if (input.equals("elite guard corpse"))
-        {
-            if (currentRoom.objsContains("elite guard corpse"))
-            {
-                System.out.println(eliteCorpse.getDesc());
-            }
-        }
-        else if (input.equals("ghoul corpse"))
-        {
-            if (currentRoom.objsContains(input))
-            {
-                System.out.println(ghoulCorpse.getDesc());
-            }
-        }
-        else if (input.equals("skeleton corpse"))
-        {
-            if (currentRoom.objsContains(input))
-            {
-                System.out.println(skeletonCorpse.getDesc());
             }
         }
         else if (input.equals("ballistic guard corpse"))
