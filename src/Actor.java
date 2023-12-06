@@ -5,6 +5,7 @@ import java.lang.Math;
 public class Actor
 {
     ////////////////////////////// INSTANCE VARIABLES //////////////////////////////
+    private static int killCount;
     private String name; // the actor's name
     private int level; // the actor's level
     private int xp; // the amount of xp accumulated
@@ -166,6 +167,11 @@ public class Actor
     public void addAtk(int atk)
     {
         this.atk += atk;
+    }
+
+    public static void addKill()
+    {
+        killCount++;
     }
 
     public void setHp(int hp)
