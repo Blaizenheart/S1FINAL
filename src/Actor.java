@@ -16,8 +16,6 @@ public class Actor
 
     private String weapon; // the weapon the actor has equipped
     private String playerClass; // the player's class (mercenary/knight/darkPriest/outlander)
-    private int gold; // the amount of gold pieces the actor has
-
     private List<String> inventory; // the actor's possessions
     private List<String> spellsList; // the spells the actor knows
 
@@ -54,7 +52,6 @@ public class Actor
         this.def = def;
         this.weapon = weapon;
         this.playerClass = playerClass;
-        this.gold = gold;
         this.inventory = new ArrayList<>(inventory);
         this.spellsList = new ArrayList<>(spellsList);
         this.deathState = deathState;
@@ -118,11 +115,6 @@ public class Actor
     public String getPlayerClass()
     {
         return playerClass;
-    }
-
-    public int getGold()
-    {
-        return gold;
     }
 
     public List getInventory()
@@ -206,11 +198,6 @@ public class Actor
         this.playerClass = playerClass;
     }
 
-    public void setGold(int gold)
-    {
-        this.gold = gold;
-    }
-
     public void addItem(String itemName) // adds an item to the actor's inventory
     {
         inventory.add(itemName);
@@ -248,16 +235,6 @@ public class Actor
         {
             hp -= hpSub;
         }
-    }
-
-    public void addGold(int goldAdd)
-    {
-        gold += goldAdd;
-    }
-
-    public void subGold(int goldSub)
-    {
-        gold -= goldSub;
     }
 
     ////////////////////////////// BRAIN METHODS //////////////////////////////
