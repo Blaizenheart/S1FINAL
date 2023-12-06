@@ -546,6 +546,7 @@ public class Game
                         currentRoom.removeEnemy(currentRoom.getEnemyIndex(enemyAttacking)); // removes the dead enemy from the room's enemyList
 
                         collectXP();
+                        addKill();
 
                         // resets status effects
                         enemyBurning = false;
