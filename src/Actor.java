@@ -30,8 +30,8 @@ public class Actor
         level = 1;
         xp = 0;
         atk = 0;
-        hp = 100;
-        maxHp = 100;
+        hp = 200;
+        maxHp = 200;
         def = 0;
         weapon = "";
         playerClass = "";
@@ -106,12 +106,12 @@ public class Actor
     {
         return def;
     }
-    
+
     public static int getKillCount()
     {
         return killCount;
     }
-    
+
     public String getWeapon()
     {
         return weapon;
@@ -167,7 +167,7 @@ public class Actor
     {
         this.atk = atk;
     }
-    
+
     public void addAtk(int atk)
     {
         this.atk += atk;
@@ -176,7 +176,7 @@ public class Actor
     public static void addKill()
     {
         killCount++;
-    }   
+    }
 
     public void setHp(int hp)
     {
@@ -302,6 +302,10 @@ public class Actor
         else if (weapon.equals("pickaxe"))
         {
             additionalAtk = 4;
+        }
+        else if (weapon.equals("greatsword"))
+        {
+            additionalAtk = 50;
         }
         else
         {
