@@ -35,14 +35,13 @@ public class Actor
         def = 0;
         weapon = "";
         playerClass = "";
-        gold = 0;
         inventory = new ArrayList<>();
         spellsList = new ArrayList<>();
         deathState = false;
     }
 
     //Full Constructor (used for the player only)
-    public Actor(String name, int level, int xp, int atk, int hp, int maxHp, int def, String weapon, String playerClass, int gold, List<String> inventory, List<String> spellsList, boolean deathState)
+    public Actor(String name, int level, int xp, int atk, int hp, int maxHp, int def, String weapon, String playerClass, List<String> inventory, List<String> spellsList, boolean deathState)
     {
         this.name = name;
         this.level = level;
