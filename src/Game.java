@@ -389,7 +389,7 @@ public class Game
             if (fighting)
             {
                 playerTurn = false;
-                turn = 0; //Will keep track of the amount of turns
+                int combatTurn = 0; //Will keep track of the amount of turns
                 guarding = false;
                 running = false;
 
@@ -411,9 +411,9 @@ public class Game
                 // combat loop
                 while (fighting)
                 {
-                    turn++; // first turn = 1 and each repetition of the loop will increase turn by 1
+                    combatTurn++; // first turn = 1 and each repetition of the loop will increase turn by 1
                     System.out.println("\n////////////////////////////////////////////////////////////");
-                    System.out.println("\nTURN " + turn);
+                    System.out.println("\nTURN " + combatTurn);
 
                     // prints the hp visual for the player and enemy
                     System.out.println("\n" + player.getName().toUpperCase() + " HP: " + player.hpVisual());
@@ -1640,7 +1640,7 @@ public class Game
         {
             if (player.hasSpell("healing word"))
             {
-                int hp = generator.nextInt(7) * generator.nextInt(7);
+                int hp = (generator.nextInt(5)+5) * (generator.nextInt(5)+5);
                 player.addHp(hp);
                 System.out.println("You've restored " + hp + " health!");
                 playerTurn = false;
@@ -1749,28 +1749,42 @@ public class Game
         }
         else if (input.equals("blue herb"))
         {
-            if (currentRoom.objsContains(input) || player.hasItem("blue herb"))
+            if (currentRoom.objsContains(input) || player.hasItem(input))
             {
                 System.out.println(blueHerb.getDesc());
             }
         }
         else if (input.equals("blue vial"))
         {
-            if (currentRoom.objsContains(input) || player.hasItem("blue vial"))
+            if (currentRoom.objsContains(input) || player.hasItem(input))
+            {
+                System.out.println(blueVial.getDesc());
+            }
+        }
+        else if (input.equals("meatpie"))
+        {
+            if (currentRoom.objsContains(input) || player.hasItem(input))
+            {
+                System.out.println(blueVial.getDesc());
+            }
+        }
+        else if (input.equals("dried meat"))
+        {
+            if (currentRoom.objsContains(input) || player.hasItem(input))
             {
                 System.out.println(blueVial.getDesc());
             }
         }
         else if (input.equals("glass shards"))
         {
-            if (currentRoom.objsContains(input) || player.hasItem("glass shards"))
+            if (currentRoom.objsContains(input) || player.hasItem(input))
             {
                 System.out.println(glassShards.getDesc());
             }
         }
         else if (input.equals("matches"))
         {
-            if (currentRoom.objsContains(input) || player.hasItem("matches"))
+            if (currentRoom.objsContains(input) || player.hasItem(input))
             {
                 System.out.println(matches.getDesc());
             }
