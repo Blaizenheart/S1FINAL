@@ -368,6 +368,7 @@ public class Game
 
         while (playing) // loop to keep the game going
         {
+            turn++;
             if (!intentionalFight || !running) // boolean intentionalFight will be true whenever the player chooses to fight something
             {
                 if (currentRoom.ambushCheck(playerClass)) // checks to see if the player is going to get ambushed
