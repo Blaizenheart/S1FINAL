@@ -12,6 +12,7 @@ public class Game
     static boolean intentionalFight = false;
     static boolean guarding = false;
     static boolean playerTurn = false;
+    static boolean playing = true;
     static int damage;
     static String playerName = "";
     static String playerClass = "";
@@ -111,7 +112,9 @@ public class Game
 
     static Actor enemy = new Actor(); // will be used to reference different actors later
 
-    static Actor player = new Actor(); // creates a default actor object for the player that will be updated lat
+    static Actor player = new Actor(); // creates a default actor object for the player that will be updated later
+    
+    static Actor leGarde = new Actor("Le'garde", 1, 50, 100, 100, 0, "greatsword", new ArrayList<>(), false);
 
     ////////////////////////////// INTERACTABLE OBJECTS //////////////////////////////
     static Obj houndCorpse = new Obj("feral hound corpse",
@@ -189,7 +192,6 @@ public class Game
     public static void main (String[] args)
     {
         // VARIABLES
-        boolean playing = true;
         boolean confirming = true;
         boolean running = false;
         int timeCount = 0; // will be used to count the amount of "turns" the player has spent in a room
@@ -199,6 +201,7 @@ public class Game
         boolean commandAccess = true;
         boolean missionAccomplished = false;
         boolean manAlive = true;
+        boolean partyMember = false;
 
         // PLAYER CLASS DESCRIPTIONS
         String mercDesc = "Mercenaries deal in close combat, making them more vulnerable to attacks,"
@@ -515,8 +518,29 @@ public class Game
                             fighting = false;
                         }
                     }
+                    
                     System.out.println("Press ENTER to continue.");
                     scan.nextLine();
+                        
+                    if (fighting) // skips party member's turn if the fight has ended
+                    {
+                        // le'garde's turn
+                        if (leGarde.missChance())
+                        {
+                            System.out.println("\nLe'garde misses his attack!");
+                        }
+                        else
+                        {
+                            damage = player.dmgCalc();
+                            System.out.println("\nLe'garde deals " + damage + " damage to the " + enemy.getName() + ".");
+                            enemy.subHp(damage);
+                        }
+                        // checks to see if the enemy is dead
+                        if (enemy.isDead())
+                        {
+                            fighting = false;
+                        }
+                    }    
 
                     if (fighting) // skips enemy turn if the fight has ended
                     {
@@ -549,7 +573,7 @@ public class Game
                         currentRoom.removeEnemy(currentRoom.getEnemyIndex(enemyAttacking)); // removes the dead enemy from the room's enemyList
 
                         collectXP();
-                        addKill();
+                        Actor.addKill();
 
                         // resets status effects
                         enemyBurning = false;
@@ -695,14 +719,96 @@ public class Game
                     }
                 }
                 else
-                {
+                { // final cutscene?
                     if (turn < 100) //IT DOES MATTER!!!
                     { // hes ALIVE!
                         System.out.println("\nYou approach the cell. Behind it is a still silhouette lying on the ground...");
-                        System.out.println("But not yet completely still.");
+                        System.out.println("But not yet completely still. He still appears to be barely breathing.");
                         if (playerClass.equals("mercenary"))
                         {
                             System.out.println("This must be the man you were hired to find.");
+                            System.out.println("You help the man up.");
+                            System.out.println("After a few moments, he seems to be responsive again.");
+                            scan.nextLine();
+                            System.out.println("\"Thank you, stranger,\" the man says. \"It is a pleasure to meet you.\"");
+                            System.out.println("\"I... can't seem to remember much, but I know my name is Le'garde.\"");
+                            System.out.println("\nLe'garde joins your party!");
+                            partyMember = true;
+                            
+                        }
+                        else if (playerClass.equals("knight"))
+                        {
+                            System.out.println("There's no mistaking it... that's your captain!");
+                            System.out.println("You help him up and dress his wounds.");
+                            System.out.println("After a few moments, he seems to be responsive again.");
+                            scan.nextLine();
+                            System.out.println("\"Thank you, " + playerName + ",\" the man says. \"I'm thankful you came for me.\"");
+                            System.out.println("\"Let's leave this wretched dungeon.\"");
+                            System.out.println("\nLe'garde joins your party!");
+                            partyMember = true;
+                        }
+                        else if (playerClass.equals("darkPriest"))
+                        {
+                            System.out.println("This is probably the man from your visions.");
+                            System.out.println("You help the man up and cast a simple healing spell.");
+                            System.out.println("After a few moments, he seems to be responsive again.");
+                            scan.nextLine();
+                            System.out.println("\"Thank you, stranger,\" the man says. \"It is a pleasure to meet you.\"");
+                            System.out.println("\"I... can't seem to remember much, but I know my name is Le'garde.\"");
+                            System.out.println("\nLe'garde joins your party!");
+                            partyMember = true;
+                        }
+                        else // outlander
+                        {
+                            System.out.println("You have no doubt in your mind that is the man that took everything from you.");
+                            System.out.println("Do you finish him off?");
+                            
+                            input = scan.nextLine().trim();
+                            input = input.toLowerCase();
+
+                            System.out.println("\n> " + input);
+                            
+                            if (input.equals("yes"))
+                            {
+                                System.out.println("You came all this way for one thing, and there's no way you'd turn back now.");
+                                System.out.println("You finish off the already dying man.");
+                                manAlive = false;
+                            }
+                            else
+                            {
+                                System.out.println("You decided that you didn't want more blood on your hands.");
+                                System.out.println("Are you going to help the man?");
+                                
+                                input = scan.nextLine().trim();
+                                input = input.toLowerCase();
+
+                                System.out.println("\n> " + input);
+                                
+                                if (input.equals("yes"))
+                                {
+                                    System.out.println("Despite your past grievances, you decide to help the man.");
+                                    scan.nextLine();
+                                    System.out.println("\"Thank you, stranger,\" the man says. \"It is a pleasure to meet you.\"");
+                                    System.out.println("\"I... can't seem to remember much, but I know my name is Le'garde.\"");
+                                    System.out.println("\nLe'garde joins your party!");
+                                    partyMember = true;
+                                }
+                                else
+                                {
+                                    System.out.println("Although you were willing to spare the man, you simply refuse to help him.");
+                                    System.out.println("You turn your back and walk away.");
+                                }
+                            }
+                            
+                        }
+                    }
+                    else
+                    {
+                        manAlive = false;
+                        System.out.println("\nYou approach the cell. Behind it is a still silhouette lying on the ground...");
+                        if (playerClass.equals("mercenary"))
+                        {
+                            System.out.println("This must have been the man you were hired to find.");
                         }
                         else if (playerClass.equals("knight"))
                         {
@@ -712,19 +818,13 @@ public class Game
                         {
                             System.out.println("This is probably the man from your visions.");
                         }
-                        else if (playerClass.equals("outlander"))
+                        else // outlander
                         {
                             System.out.println("You have no doubt in your mind that is the man that took everything from you.");
+                            System.out.println("How disappointing. You cannot enact your revenge on a dead man.");
                         }
-                        else  // dev class
-                        {
-                            
-                        }
-                    }
-                    else
-                    {
-                        manAlive = false;
-                        System.out.println("\nYou approach the cell. Behind it is a still silhouette lying on the ground...");
+                        System.out.println("You've fulfilled your purpose. It's time to get out of here.");
+                        
                     }
                     commandAccess = true;
                     missionAccomplished = true;
@@ -733,7 +833,87 @@ public class Game
                 }
             }
         }
-        System.out.println("\n Thank you for playing!");
+        //endings
+        if (missionAccomplished && manAlive)
+        {
+            if (playerClass.equals("mercenary"))
+            {
+                System.out.println("You and Le'garde part ways, and you eventually get paid for finding him.");
+                System.out.println("After a week or so of doing small jobs for money, you eventually hear the news.");
+                System.out.println("Apparently... there is a man who is waging war on all the nations in an attempt to unite them.");
+                System.out.println("THE END");
+            }
+            else if (playerClass.equals("knight"))
+            {
+                System.out.println("As you leave the dungeons, Le'garde tells you about his plan to unite the nations of Europa.");
+                System.out.println("You agree to join him. After a week of gathering men for the war that's about to come,");
+                System.out.println("Le'garde wages war against all of the nations.");
+                System.out.println("You feel rather hopeful for the future.");
+                System.out.println("THE END");
+            }
+            else if (playerClass.equals("darkPriest"))
+            {
+                System.out.println("As you part ways with Le'garde, he tells you about his plans of uniting the different nations.");
+                System.out.println("You already knew about this from your vision, but you pretended to be surprised anyways.");
+                System.out.println("This guy has a massive ego, and you're not sure you like that...");
+                System.out.println("You decide to follow him despite that. Perhaps then you can keep a closer eye on him.");
+                System.out.println("THE END");
+            }
+            else // outlander
+            {
+                if (partyMember)
+                {
+                    System.out.println("You cannot tolerate this man any longer.");
+                    System.out.println("You quickly part ways with Le'garde...");
+                    System.out.println("It is only a week or so later that you hear news about him waging war on all of the nations.");
+                    System.out.println("Apparently he has this grandiose plan of uniting the different nations...");
+                    System.out.println("You can't help but wonder if you made the wrong decision by letting him live.");
+                    System.out.println("THE END");
+                }
+                else // alive but left behind
+                {
+                    System.out.println("You can't help but wonder what you're going to do now.");
+                    System.out.println("Truthfully, you had never thought about what you'd do after you killed him.");
+                    System.out.println("Where will you go now?");
+                    System.out.println("THE END");
+                }
+                
+            }
+        }
+        else if (missionAccomplished) // but he's dead
+        {
+            if (playerClass.equals("mercenary"))
+            {
+                System.out.println("Although you were unable to find the man alive, you were still paid.");
+                System.out.println("Those dungeons... what on earth had happened there?");
+                System.out.println("Whatever secrets the dungeons hold are of no concern to you.");
+                System.out.println("As long as you're alive and surviving, that's all that matters.");
+                System.out.println("THE END");
+            }
+            else if (playerClass.equals("knight"))
+            {
+                System.out.println("You leave the dungeons behind shameful, as you had failed your mission.");
+                System.out.println("Perhaps, if you had gotten to him in time, your captain would still be alive.");
+                System.out.println("Who will you fight for now?");
+                System.out.println("THE END");
+            }
+            else if (playerClass.equals("darkPriest"))
+            {
+                System.out.println("You leave the dungeons mildly disappointed.");
+                System.out.println("You were hoping he would still be alive by the time you got to him,");
+                System.out.println("but it seems like you were too late.");
+                System.out.println("Perhaps he wasn't the man from your visions anyways...");
+                System.out.println("THE END");
+            }
+            else // outlander
+            {
+                System.out.println("You can't help but wonder what you're going to do now.");
+                System.out.println("Truthfully, you had never thought about what you'd do after you killed him.");
+                System.out.println("THE END");
+            }
+        }
+        System.out.println("\nThank you for playing!");
+        System.out.println("You killed " + Actor.getKillCount() + " enemies!");
     }
 
     ////////////////////////////// STATIC METHODS //////////////////////////////
@@ -787,7 +967,7 @@ public class Game
         {
             currentRoom = eastWing;
         }
-        else if (currentRoom.getName().equals("Catacombs") && (direction.equals("north") || direction.equals("north")))
+        else if (currentRoom.getName().equals("Catacombs") && (direction.equals("north") || direction.equals("n")))
         {
             currentRoom = catacombCell;
         }
@@ -834,6 +1014,10 @@ public class Game
         else if (currentRoom.getName().equals("Hidden Chamber") && (direction.equals("south") || direction.equals("s")))
         {
             currentRoom = westWing;
+        }
+        else if (currentRoom.getName().equals("Entrance") && (direction.equals("south") || direction.equals("s")))
+        {
+            playing = false;
         }
     }
 
