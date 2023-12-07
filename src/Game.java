@@ -2,7 +2,6 @@ import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
-import java.lang.Math;
 
 public class Game
 {
@@ -61,7 +60,7 @@ public class Game
 
     static Room hiddenChamber = new Room("Hidden Chamber",
             "This is a small, oddly normal room. There are a few dusty \nbookshelves lined against the wall.",
-            false, false, true, false, true, new ArrayList<>(), List.of("large key", "blue vial"));
+            false, false, true, false, true, new ArrayList<>(), List.of("large key", "blue vial", "occult book"));
 
     static Room cavern = new Room("Cavern",
             "This is a relatively big area. The ground is broken into \ndifferent chunks that are raised some distance from the actual \n"
@@ -101,11 +100,11 @@ public class Game
     static Actor ghoul = new Actor("prisoner ghoul", 1, 5, 100, 100, 0, "", new ArrayList<>(), false);
 
     static Actor skeleton = new Actor("silly skeleton", 1, 5, 200, 200, 0, "", new ArrayList<>(), false);
-    
+
     static Actor cavebeing = new Actor("cavebeing", 1, 5, 800, 800, 0, "", new ArrayList<>(), false);
 
     static Actor cavegnome = new Actor("cavegnome", 1, 5, 300, 300, 0, "claws", new ArrayList<>(), false);
-    
+
     static Actor rockMonster = new Actor("rocky amalgamation", 1, 5, 2000, 2000, 0, "", new ArrayList<>(), false);
 
     static Actor zombieMiner = new Actor("zombie miner", 1, 5, 200, 200, 0, "pickaxe", new ArrayList<>(), false);
@@ -113,7 +112,7 @@ public class Game
     static Actor enemy = new Actor(); // will be used to reference different actors later
 
     static Actor player = new Actor(); // creates a default actor object for the player that will be updated later
-    
+
     static Actor leGarde = new Actor("Le'garde", 1, 50, 100, 100, 0, "greatsword", new ArrayList<>(), false);
 
     ////////////////////////////// INTERACTABLE OBJECTS //////////////////////////////
@@ -125,28 +124,28 @@ public class Game
 
     static Obj guardCorpse = new Obj("prison guard corpse",
             "It is the corpse of a mutated prison guard. Odd tumor-like \nclumps of flesh have formed all over its body. Perhaps it was human once.", false, true, false, List.of("blue vial"));
-            
+
     static Obj eliteCorpse = new Obj("elite guard corpse",
-            "It is the corpse of a mutated elite guard. This one was \nlikely in charge of the other prison guards, judging from the larger stature.", false, true, false, List.of("blue vial"));        
-            
+            "It is the corpse of a mutated elite guard. This one was \nlikely in charge of the other prison guards, judging from the larger stature.", false, true, false, List.of("blue vial"));
+
     static Obj ghoulCorpse = new Obj("ghoul corpse",
             "It is the corpse of a ghoul. It is wearing a tattered prisoner's\n attire. The veins across its body are bloodshot red, and its hands seem burnt.", false, false, false, new ArrayList<>());
 
     static Obj skeletonCorpse = new Obj("skeleton corpse",
             "It is a skeleton. It's bones have become disconnected from one another.", false, false, false, new ArrayList<>());
-            
+
     static Obj cavebeingCorpse = new Obj("cavebeing corpse",
             "It is the corpse of some sort of cave-dwelling creature. It lacks\n any human traits, resembling more of a bipedal tree \nwith hard textured flesh instead of bark.", false, false, false, new ArrayList<>());
-    
+
     static Obj cavegnomeCorpse = new Obj("cavegnome corpse",
             "It is the corpse of a cavegnome, whatever that is. It has a small \nbody made of a hard mineral substance that is covered \nwith small fungi and masses of mold.", false, false, false, new ArrayList<>());
-    
+
     static Obj rockMonsterCorpse = new Obj("pile of rocks",
             "It has been reduced to a pile of rocks of varying sizes.", false, false, false, new ArrayList<>());
-    
+
     static Obj zombieMinerCorpse = new Obj("zombie miner corpse",
             "Is is the corpse of a miner. The body is in a terrible condition, \nand some of the bones are visible as areas of flesh have rotted and fallen off.", false, false, false, new ArrayList<>());
-            
+
     static Obj blueHerb = new Obj("blue herb",
             "It is a small blue-colored plant with medicinal properties.", false, false, true, new ArrayList<>());
 
@@ -169,24 +168,27 @@ public class Game
 
     static Obj rustyKey = new Obj("rusty key",
             "The metal key is rusting at the edges.", false, false, true, new ArrayList<>());
-            
+
     static Obj metalGate = new Obj("metal gate",
             "The metal gate is locked with a copper padlock. If you had a key, \nperhaps you could unlock it.", true, false, false, new ArrayList<>());
 
     static Obj copperKey = new Obj("copper key",
-            "The copper key seems to be in good condition.", false, false, true, new ArrayList<>());        
-            
+            "The copper key seems to be in good condition.", false, false, true, new ArrayList<>());
+
     static Obj giantDoor = new Obj("giant door",
             "The door stands tall, but fortunately, the keyhole is within your \nreach. If you had a key, perhaps you could unlock it.", true, false, false, new ArrayList<>());
 
     static Obj largeKey = new Obj("large key",
-            "The key is large but surprisingly light.", false, false, true, new ArrayList<>());        
+            "The key is large but surprisingly light.", false, false, true, new ArrayList<>());
 
     static Obj minecart = new Obj("minecart",
             "The minecart is filled with rocks.", false, true, false, List.of("rusty key"));
 
     static Obj barrel = new Obj("barrel",
             "A wooden barrel.", false, true, false, new ArrayList<>());
+
+    static Obj occultBook = new Obj("Occult Book",
+            "A heavy book with a leather cover. The pages within are yellowed at the edges.", false, false, false, new ArrayList<>());
 
     ////////////////////////////// MAIN METHOD //////////////////////////////
     public static void main (String[] args)
@@ -518,10 +520,10 @@ public class Game
                             fighting = false;
                         }
                     }
-                    
+
                     System.out.println("Press ENTER to continue.");
                     scan.nextLine();
-                        
+
                     if (fighting) // skips party member's turn if the fight has ended
                     {
                         // le'garde's turn
@@ -540,7 +542,7 @@ public class Game
                         {
                             fighting = false;
                         }
-                    }    
+                    }
 
                     if (fighting) // skips enemy turn if the fight has ended
                     {
@@ -665,13 +667,13 @@ public class Game
                             Game.moveTo("west");
                         }
                     }
-                    
+
                     //displays information
                     if (input.equals("inventory"))
                     {
                         System.out.println(player.openInventory());
                     }
-    
+
                     if (input.equals("profile"))
                     {
                         System.out.println(player.openProfile());
@@ -734,7 +736,7 @@ public class Game
                             System.out.println("\"I... can't seem to remember much, but I know my name is Le'garde.\"");
                             System.out.println("\nLe'garde joins your party!");
                             partyMember = true;
-                            
+
                         }
                         else if (playerClass.equals("knight"))
                         {
@@ -762,12 +764,12 @@ public class Game
                         {
                             System.out.println("You have no doubt in your mind that is the man that took everything from you.");
                             System.out.println("Do you finish him off?");
-                            
+
                             input = scan.nextLine().trim();
                             input = input.toLowerCase();
 
                             System.out.println("\n> " + input);
-                            
+
                             if (input.equals("yes"))
                             {
                                 System.out.println("You came all this way for one thing, and there's no way you'd turn back now.");
@@ -778,12 +780,12 @@ public class Game
                             {
                                 System.out.println("You decided that you didn't want more blood on your hands.");
                                 System.out.println("Are you going to help the man?");
-                                
+
                                 input = scan.nextLine().trim();
                                 input = input.toLowerCase();
 
                                 System.out.println("\n> " + input);
-                                
+
                                 if (input.equals("yes"))
                                 {
                                     System.out.println("Despite your past grievances, you decide to help the man.");
@@ -799,7 +801,7 @@ public class Game
                                     System.out.println("You turn your back and walk away.");
                                 }
                             }
-                            
+
                         }
                     }
                     else
@@ -824,7 +826,7 @@ public class Game
                             System.out.println("How disappointing. You cannot enact your revenge on a dead man.");
                         }
                         System.out.println("You've fulfilled your purpose. It's time to get out of here.");
-                        
+
                     }
                     commandAccess = true;
                     missionAccomplished = true;
@@ -877,7 +879,7 @@ public class Game
                     System.out.println("Where will you go now?");
                     System.out.println("THE END");
                 }
-                
+
             }
         }
         else if (missionAccomplished) // but he's dead
@@ -1371,6 +1373,20 @@ public class Game
                     System.out.println("You don't have a blue vial to use!");
                 }
             }
+            else if (input.equals("occult book"))
+            {
+                if (player.hasItem(input))
+                {
+                    System.out.println("You read the " + input + ".");
+                    player.subItem(player.inventoryIndex("occult book"));
+                    System.out.println("You learn a healing spell!");
+                    System.out.println("However, just as you're about to read the rest of the book, it crumples into dust.");
+                }
+                else
+                {
+                    System.out.println("You don't have an occult book to read!");
+                }
+            }
             else if (input.equals("matches"))
             {
                 if (player.hasItem(input))
@@ -1530,6 +1546,16 @@ public class Game
                 }
                 else
                 {
+                    System.out.println("\nThat's not in here.");
+                }
+            }
+            else if (input.equals("occult book")) 
+            {
+                if (currentRoom.objsContains(input)) {
+                    System.out.println("You take the " + input + ".");
+                    player.addItem("occult book");
+                    currentRoom.removeObj(currentRoom.getObjIndex(input));
+                } else {
                     System.out.println("\nThat's not in here.");
                 }
             }
@@ -1866,7 +1892,7 @@ public class Game
             if (input.substring(input.length()-6).equals("corpse") && currentRoom.objsContains(input)) // player is trying to search a corpse w/o loot
             {
                 System.out.println("The " + input + " has nothing of value.");
-            }  
+            }
         }
         else if (currentRoom.objsContains(input)) // object is in the room but not lootable
         {
