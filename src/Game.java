@@ -146,6 +146,9 @@ public class Game
     static Obj zombieMinerCorpse = new Obj("zombie miner corpse",
             "Is is the corpse of a miner. The body is in a terrible condition, \nand some of the bones are visible as areas of flesh have rotted and fallen off.", false, false, false, new ArrayList<>());
 
+    static Obj humanCorpse = new Obj("human corpse",
+            "Is is the corpse of a man. From the wounds all over his body, it seems like he had endured a lot of torture.", false, true, false, List.of("greatsword"));
+
     static Obj blueHerb = new Obj("blue herb",
             "It is a small blue-colored plant with medicinal properties.", false, false, true, new ArrayList<>());
 
@@ -831,6 +834,10 @@ public class Game
                     commandAccess = true;
                     missionAccomplished = true;
                     entrance.setSouthExit(true);
+                    if (!manAlive) //adds his corpse to the room
+                    {
+                        catacombCell.addObj("human corpse");
+                    }
                     // unlocks the south exit to the entrance... we can leave now!!
                 }
             }
@@ -916,6 +923,7 @@ public class Game
         }
         System.out.println("\nThank you for playing!");
         System.out.println("You killed " + Actor.getKillCount() + " enemies!");
+        System.out.println("You finished the game in " + turn + " turns!");
     }
 
     ////////////////////////////// STATIC METHODS //////////////////////////////
@@ -1549,7 +1557,7 @@ public class Game
                     System.out.println("\nThat's not in here.");
                 }
             }
-            else if (input.equals("occult book")) 
+            else if (input.equals("occult book"))
             {
                 if (currentRoom.objsContains(input)) {
                     System.out.println("You take the " + input + ".");
@@ -1718,6 +1726,13 @@ public class Game
                 System.out.println(cavegnomeCorpse.getDesc());
             }
         }
+        else if (input.equals("human corpse"))
+        {
+            if (currentRoom.objsContains(input))
+            {
+                System.out.println(humanCorpse.getDesc());
+            }
+        }
         else if (input.equals("pile of rocks"))
         {
             if (currentRoom.objsContains(input))
@@ -1883,6 +1898,26 @@ public class Game
                 }
             }
             else
+            {
+                System.out.println("There's no " + input + " to search.");
+            }
+        }
+        else if (input.equals("human corpse"))
+        {
+            if (currentRoom.objsContains(input))
+            {
+                if (humanCorpse.isLootable())
+                {
+                    humanCorpse.getItems();
+                    humanCorpse.setLoot(false);
+                    System.out.println("You searched through his belongings.");
+                    System.out.println("It seems like he had a greatsword on him! \nHolding it gives you the feeling of immense power...");
+                    player.setWeapon("greatsword");
+                } else
+                {
+                    System.out.println("The body doesn't have anything valuable anymore.");
+                }
+            } else
             {
                 System.out.println("There's no " + input + " to search.");
             }
