@@ -106,7 +106,12 @@ public class Actor
     {
         return def;
     }
-
+    
+    public static int getKillCount()
+    {
+        return killCount;
+    }
+    
     public String getWeapon()
     {
         return weapon;
@@ -162,7 +167,7 @@ public class Actor
     {
         this.atk = atk;
     }
-
+    
     public void addAtk(int atk)
     {
         this.atk += atk;
@@ -171,7 +176,7 @@ public class Actor
     public static void addKill()
     {
         killCount++;
-    }
+    }   
 
     public void setHp(int hp)
     {
@@ -443,7 +448,6 @@ public class Actor
         output += xpVisual();
         output += "\nClass: " + playerClass.toUpperCase();
         output += "\nEquipped: " + weapon;
-        output += "\nGold: " + gold;
         output += "\n-----STATS-----";
         output += "\nHP: ";
         output += hpVisual();
