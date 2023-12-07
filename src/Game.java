@@ -527,7 +527,7 @@ public class Game
                     System.out.println("Press ENTER to continue.");
                     scan.nextLine();
 
-                    if (fighting) // skips party member's turn if the fight has ended
+                    if (fighting && partyMember) // skips party member's turn if the fight has ended
                     {
                         // le'garde's turn
                         if (leGarde.missChance())
