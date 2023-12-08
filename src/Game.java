@@ -358,6 +358,9 @@ public class Game
             player.addSpell("fireball");
             player.addSpell("healing word");
             player.setPlayerClass("mercenary"); //stealth bonus
+            player.addItem("copper Key");
+            player.addItem("metal key");
+            player.addItem("large key");
         }
         System.out.println("\nAs you near the dungeon, the mist begins to get thicker...\n");
 
