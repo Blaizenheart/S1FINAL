@@ -215,7 +215,7 @@ public class Game
         String knightDesc = "Knights are especially resilient against enemy attacks,"
                 + "\nbut their clunky armor reduces their stealth.";
         String priestDesc = "The dark priest has a strong affinity to magic,"
-                + "\nbut lacks physical \nstrength.";
+                + "\nbut lacks physical strength.";
         String outlanderDesc = "The outlander uses a bow to attack the enemy from afar,"
                 + "\ndealing less damage but evading more attacks.";
 
@@ -1106,7 +1106,7 @@ public class Game
         }
         else if (enemy.getName().equals("zombie miner"))
         {
-            System.out.println("\nThe zombie mine raises its pickaxe arm...");
+            System.out.println("\nThe zombie miner raises its pickaxe arm...");
             System.out.println("It brings the pickaxe down!");
         }
 
