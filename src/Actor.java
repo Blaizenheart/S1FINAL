@@ -273,7 +273,7 @@ public class Actor
 
     public int dmgCalc() // calculates the amount of damage done
     {
-        int damage;
+        int damage = (int) (atk * level * 0.7);
         int additionalAtk; // weapons increase base atk
         if (weapon.equals("dagger"))
         {
@@ -305,7 +305,7 @@ public class Actor
         }
         else if (weapon.equals("greatsword"))
         {
-            additionalAtk = 50;
+            additionalAtk = 30;
         }
         else
         {
@@ -379,7 +379,7 @@ public class Actor
     {
         boolean result = false;
         int chance = Game.generator.nextInt(11)+1;
-        if (playerClass == "outlander" || enemyBlinded == true) // enemies are more likely to miss attacks against outlanders
+        if (playerClass.equals("outlander") || enemyBlinded) // enemies are more likely to miss attacks against outlanders
         {
             if (chance >= 5)
             {
