@@ -358,7 +358,7 @@ public class Game
             player.addSpell("fireball");
             player.addSpell("healing word");
             player.setPlayerClass("mercenary");
-            playerClass = "mercenary";
+            playerClass = "outlander";
             //stealth bonus
             player.addItem("copper key");
             player.addItem("rusty key");
