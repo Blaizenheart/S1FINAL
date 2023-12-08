@@ -1398,7 +1398,16 @@ public class Game
                 {
                     System.out.println("You read the " + input + ".");
                     player.subItem(player.inventoryIndex("occult book"));
-                    System.out.println("You learn a healing spell!");
+                    if (player.hasSpell("fireball"))
+                    {
+                        System.out.println("Unfortunately, this book seems to teach basic spells you already know. Bummer.");
+
+                    }
+                    else
+                    {
+                        System.out.println("You learn a healing spell!");
+                        player.addSpell("healing word");
+                    }
                     System.out.println("However, just as you're about to read the rest of the book, it crumples into dust.");
                 }
                 else
