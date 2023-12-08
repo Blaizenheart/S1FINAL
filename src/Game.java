@@ -358,8 +358,9 @@ public class Game
             player.addSpell("fireball");
             player.addSpell("healing word");
             player.setPlayerClass("mercenary"); //stealth bonus
-            player.addItem("copper Key");
-            player.addItem("metal key");
+            player.addItem("copper key");
+            player.addItem("rusty key");
+            player.addItem("matches");
             player.addItem("large key");
         }
         System.out.println("\nAs you near the dungeon, the mist begins to get thicker...\n");
@@ -1475,7 +1476,7 @@ public class Game
                 }
                 else
                 {
-                    System.out.println("You don't have a copper key to use!");
+                    System.out.println("You don't have a large key to use!");
                 }
             }
             else
