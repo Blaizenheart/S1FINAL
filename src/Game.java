@@ -1467,7 +1467,7 @@ public class Game
                 {
                     System.out.println("You try fitting the " + input + " into the giant door.");
                     System.out.println("It fits perfectly!");
-                    currentRoom.removeObj(currentRoom.getObjIndex("metal gate"));
+                    currentRoom.removeObj(currentRoom.getObjIndex("giant door"));
                     player.subItem(player.inventoryIndex("large key"));
                     giantDoor.setLock(false);
                     currentRoom.setNorthExit(true);
