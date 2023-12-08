@@ -65,7 +65,7 @@ public class Game
     static Room cavern = new Room("Cavern",
             "This is a relatively big area. The ground is broken into \ndifferent chunks that are raised some distance from the actual \n"
                     + "floor of the cavern. The drop from here would be fatal. There \nare several bridges that connect the land masses.",
-            false, true, false, false, false, List.of("cavebeing", "cavegnome"), List.of("metal gate")); // west exit unlocked later w/ key
+            false, true, true, false, false, List.of("cavebeing", "cavegnome"), List.of("metal gate")); // west exit unlocked later w/ key
 
     static Room mines = new Room("Mines",
             "The area is composed of diverging and converging tunnel \nstructures. This place was likely created with the intention of \nbeing used for mineral extraction. \nWhat came first, the dungeon or the mines?",
