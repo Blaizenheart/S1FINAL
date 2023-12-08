@@ -12,6 +12,8 @@ public class Game
     static boolean guarding = false;
     static boolean playerTurn = false;
     static boolean playing = true;
+    static boolean missionAccomplished = false;
+    static boolean commandAccess = true;
     static int damage;
     static String playerName = "";
     static String playerClass = "";
@@ -203,8 +205,6 @@ public class Game
         boolean firstTurn = true;
         boolean firstBattle = true;
         boolean allowedMove = false;
-        boolean commandAccess = true;
-        boolean missionAccomplished = false;
         boolean manAlive = true;
         boolean partyMember = false;
 
@@ -357,7 +357,9 @@ public class Game
             player.setMaxHp(1000);
             player.addSpell("fireball");
             player.addSpell("healing word");
-            player.setPlayerClass("mercenary"); //stealth bonus
+            player.setPlayerClass("mercenary");
+            playerClass = "mercenary";
+            //stealth bonus
             player.addItem("copper key");
             player.addItem("rusty key");
             player.addItem("matches");
@@ -984,6 +986,10 @@ public class Game
         }
         else if (currentRoom.getName().equals("Catacombs") && (direction.equals("north") || direction.equals("n")))
         {
+            if (!missionAccomplished)
+            {
+                commandAccess = false;
+            }
             currentRoom = catacombCell;
         }
         else if (currentRoom.getName().equals("Catacomb Cell") && (direction.equals("south") || direction.equals("s")))
