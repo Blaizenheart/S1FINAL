@@ -619,6 +619,7 @@ public class Game
                         System.out.println("spells = displays the spells you've learned");
                         System.out.println("move = lets you move to different areas");
                         System.out.println("look = describes the area around you");
+                        System.out.println("take = lets you take an object from the room");
                         System.out.println("use = lets you use an item from your inventory");
                         System.out.println("examine = lets you examine an object in the room");
                         System.out.println("search = lets you search an object in the room");
