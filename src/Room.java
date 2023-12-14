@@ -164,7 +164,7 @@ public class Room
     ////////////////////////////// BRAIN METHODS //////////////////////////////
     public boolean ambushCheck(String playerClass)
     { // calculates and returns true if the player is ambushed
-        int chance = Game.generator.nextInt(11) + 1; // 1 - 10
+        int chance = Game.generator.nextInt(10) + 1; // 1 - 10
         boolean ambush = false;
         int bonus = 0;
         // mercenaries have a decreased chance of being ambushed
