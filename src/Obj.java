@@ -94,7 +94,7 @@ public class Obj
         int rand;
         if (obj.getName().equals("barrel"))
         {
-            rand = Game.generator.nextInt(6) + 1;  // 1-5
+            rand = Game.generator.nextInt(5) + 1;  // 1-5
             if (rand == 1)
             {
                 actor.addItem("blue vial");
